@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+{% load template_tags %}
+
+{% block content %}
+    <div class="container my-5">
+        <div class="row">
+            <!-- Left Column: Stats Carousel -->
+            <div class="col-12 col-md-5 mb-4 mb-md-0">
+                <div class="d-grid gap-3 px-1 py-2"
+                     style="grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));">
+
+                    <!-- All Tickets -->
+                    <div class="filter-tile bg-light rounded shadow-sm text-center d-flex flex-column justify-content-center align-items-center p-2"
+                         data-filter-type="priority" data-filter-value="all"
+                         style="min-width: 120px; height: 120px; scroll-snap-align: start; flex-shrink: 0; cursor: pointer;">
+                        <div class="text-secondary small">All Tickets</div>
+                        <div class="fw-bold fs-4 main-color">{{ tickets.count }}</div>
+                    </div>
+
+                    <!-- Critical Priority -->
+                    <div class="filter-tile bg-light rounded shadow-sm text-center d-flex flex-column justify-content-center align-items-center p-2"
+                         data-filter-type="priority" data-filter-value="high"
+                         style="min-width: 120px; height: 120px; scroll-snap-align: start; flex-shrink: 0; cursor: pointer;">
+                        <div class="text-secondary small">Critical Priority</div>
+                        <div class="fw-bold fs-4 text-danger">{{ tickets|filter_by_priority:"Critical"|length }}</div>
+                    </div>
+
+                    <!-- Priority Filters -->
+                    <div class="filter-tile bg-light rounded shadow-sm text-center d-flex flex-column justify-content-center align-items-center p-2"
+                         data-filter-type="priority" data-filter-value="high"
+                         style="min-width: 120px; height: 120px; scroll-snap-align: start; flex-shrink: 0; cursor: pointer;">
+                        <div class="text-secondary small">High Priority</div>
+                        <div class="fw-bold fs-4 text-danger">{{ tickets|filter_by_priority:"High"|length }}</div>
+                    </div>
+
+                    <div class="filter-tile bg-light rounded shadow-sm text-center d-flex flex-column justify-content-center align-items-center p-2"
+                         data-filter-type="priority" data-filter-value="medium"
+                         style="min-width: 120px; height: 120px; scroll-snap-align: start; flex-shrink: 0; cursor: pointer;">
+                        <div class="text-secondary small">Medium Priority</div>
+                        <div class="fw-bold fs-4 text-warning">{{ tickets|filter_by_priority:"Medium"|length }}</div>
+                    </div>
+
+                    <div class="filter-tile bg-light rounded shadow-sm text-center d-flex flex-column justify-content-center align-items-center p-2"
+                         data-filter-type="priority" data-filter-value="low"
+                         style="min-width: 120px; height: 120px; scroll-snap-align: start; flex-shrink: 0; cursor: pointer;">
+                        <div class="text-secondary small">Low Priority</div>
+                        <div class="fw-bold fs-4 main-color">{{ tickets|filter_by_priority:"Low"|length }}</div>
+                    </div>
+
+                    <!-- Facility Tiles -->
+                    {% for facility in facilities %}
+                        <div class="filter-tile bg-light rounded shadow-sm text-center d-flex flex-column justify-content-center align-items-center p-2"
+                             data-filter-type="facility" data-filter-value="{{ facility.id }}"
+                             style="min-width: 120px; height: 120px; scroll-snap-align: start; flex-shrink: 0; cursor: pointer;">
+                            <div class="text-secondary small">{{ facility.name }}</div>
+                            <div class="fw-bold fs-4 main-color">{{ tickets|filter_by_facility:facility.id|length }}</div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+
+            <!-- Right Column: Tickets -->
+            <div class="col-12 col-md-7">
+                <div class="card shadow-sm">
+                    <div class="card-header main-color-bg text-white">
+                        <h5 class="mb-0">Recent Tickets</h5>
+                    </div>
+                    <div class="card-body" id="ticket-list">
+                        <!-- include "tickets/partial-tickets-list.html" with tickets=recent_tickets %} -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="#"></script>
+{% endblock %}
+
