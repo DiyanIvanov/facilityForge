@@ -16,3 +16,17 @@ class IndexPageView(TemplateView):
 
 class AboutPageView(TemplateView):
     template_name = 'common/about.html'
+    #todo add tickets and facilities data when models are ready
+    extra_context = {
+        'tickets': None,
+        'facilities': None,
+    }
+
+class DashboardView(TemplateView):
+    template_name = 'common/dashboard.html'
+
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('login')
+        return super().dispatch(request, *args, **kwargs)
