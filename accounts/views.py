@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import reverse_lazy
 from django.views.generic import CreateView
 
 
@@ -16,4 +17,5 @@ class RegisterView(CreateView):
     model = UserModel
     form_class = UserCreationForm
     template_name = 'accounts/register-page.html'
-    fields = ['username', 'email', 'password']
+    # Todo: Change to Index when common app is created
+    success_url = reverse_lazy('login')
