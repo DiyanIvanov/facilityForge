@@ -208,3 +208,5 @@ __marimo__/
 
 
 
+# JetBrains specific template is maintained in a separate JetBrains.gitignore that can
+.idea
