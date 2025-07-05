@@ -24,7 +24,10 @@
                          data-filter-type="priority" data-filter-value="high"
                          style="min-width: 120px; height: 120px; scroll-snap-align: start; flex-shrink: 0; cursor: pointer;">
                         <div class="text-secondary small">Critical Priority</div>
-                        <div class="fw-bold fs-4 text-danger">{{ tickets|filter_by_priority:"Critical"|length }}</div>
+                        <div class="fw-bold fs-4 text-danger">
+                            <!-- tickets|filter_by_priority:"Critical"|length }} -->
+                            3
+                        </div>
                     </div>
 
                     <!-- Priority Filters -->
@@ -32,21 +35,27 @@
                          data-filter-type="priority" data-filter-value="high"
                          style="min-width: 120px; height: 120px; scroll-snap-align: start; flex-shrink: 0; cursor: pointer;">
                         <div class="text-secondary small">High Priority</div>
-                        <div class="fw-bold fs-4 text-danger">{{ tickets|filter_by_priority:"High"|length }}</div>
+                        <div class="fw-bold fs-4 text-danger">
+                            <!-- tickets|filter_by_priority:"High"|length }} -->
+                        </div>
                     </div>
 
                     <div class="filter-tile bg-light rounded shadow-sm text-center d-flex flex-column justify-content-center align-items-center p-2"
                          data-filter-type="priority" data-filter-value="medium"
                          style="min-width: 120px; height: 120px; scroll-snap-align: start; flex-shrink: 0; cursor: pointer;">
                         <div class="text-secondary small">Medium Priority</div>
-                        <div class="fw-bold fs-4 text-warning">{{ tickets|filter_by_priority:"Medium"|length }}</div>
+                        <div class="fw-bold fs-4 text-warning">
+                            <!-- tickets|filter_by_priority:"Medium"|length }} -->
+                        </div>
                     </div>
 
                     <div class="filter-tile bg-light rounded shadow-sm text-center d-flex flex-column justify-content-center align-items-center p-2"
                          data-filter-type="priority" data-filter-value="low"
                          style="min-width: 120px; height: 120px; scroll-snap-align: start; flex-shrink: 0; cursor: pointer;">
                         <div class="text-secondary small">Low Priority</div>
-                        <div class="fw-bold fs-4 main-color">{{ tickets|filter_by_priority:"Low"|length }}</div>
+                        <div class="fw-bold fs-4 main-color">
+                            <!-- tickets|filter_by_priority:"Low"|length }} -->
+                        </div>
                     </div>
 
                     <!-- Facility Tiles -->
@@ -55,7 +64,10 @@
                              data-filter-type="facility" data-filter-value="{{ facility.id }}"
                              style="min-width: 120px; height: 120px; scroll-snap-align: start; flex-shrink: 0; cursor: pointer;">
                             <div class="text-secondary small">{{ facility.name }}</div>
-                            <div class="fw-bold fs-4 main-color">{{ tickets|filter_by_facility:facility.id|length }}</div>
+                            <div class="fw-bold fs-4 main-color">
+                                <!-- tickets|filter_by_facility:facility.id|length }} -->
+                                1
+                            </div>
                         </div>
                     {% endfor %}
 
