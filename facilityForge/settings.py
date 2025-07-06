@@ -147,4 +147,4 @@ AUTH_USER_MODEL = 'accounts.FacilityForgeUser'
 
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = reverse_lazy('dashboard')
-# LOGOUT_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = reverse_lazy('index')
