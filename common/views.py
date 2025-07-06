@@ -1,4 +1,7 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
 
 
@@ -22,11 +25,8 @@ class AboutPageView(TemplateView):
         'facilities': None,
     }
 
-class DashboardView(TemplateView):
+@method_decorator(never_cache, name='dispatch')
+class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'common/dashboard.html'
 
 
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return redirect('login')
-        return super().dispatch(request, *args, **kwargs)
