@@ -31,7 +31,6 @@ class FacilityForgeUser(AbstractUser):
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
-    members = models.ManyToManyField(FacilityForgeUser, related_name='teams', blank=True)
     # tickets = models.ManyToManyField(
     #     'tickets.Ticket',
     #     related_name='teams',
