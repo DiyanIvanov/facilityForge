@@ -33,7 +33,10 @@
                         <a class="nav-link custom-nav-link" href="#">Facilities</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link custom-nav-link" href="#">Logout</a>
+                        <a class="nav-link custom-nav-link" href="{% url 'logout' %}"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
                     </li>
                 {% else %}
                     <li class="nav-item">
@@ -47,7 +50,13 @@
                     <a class="nav-link custom-nav-link" href="{% url 'about' %}">About</a>
                 </li>
             </ul>
+
+            <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none">
+                {% csrf_token %}
+            </form>
         </div>
 
     </div>
 </nav>
+
+
