@@ -9,11 +9,11 @@ class FacilityForgeUser(AbstractUser):
         blank=True,
         null=True
     )
-    # team = models.ManyToManyField(
-    #     'Team',
-    #     related_name='members',
-    #     blank=True,
-    # )
+    team = models.ManyToManyField(
+        'Team',
+        related_name='members',
+        blank=True,
+    )
     # facilities = models.ManyToManyField(
     #     'facilities.Facility',
     #     related_name='users',
@@ -28,3 +28,18 @@ class FacilityForgeUser(AbstractUser):
     def __str__(self):
         return self.username
 
+
+class Team(models.Model):
+    name = models.CharField(max_length=100)
+    members = models.ManyToManyField(FacilityForgeUser, related_name='teams', blank=True)
+    # tickets = models.ManyToManyField(
+    #     'tickets.Ticket',
+    #     related_name='teams',
+    #     blank=True,
+    # )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'Teams'
