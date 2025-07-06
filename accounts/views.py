@@ -16,5 +16,4 @@ class RegisterView(CreateView):
     model = UserModel
     form_class = CustomRegisterForm
     template_name = 'accounts/register-page.html'
-    # Todo: Change to Index when common app is created
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('index')
