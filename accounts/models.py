@@ -9,11 +9,7 @@ class FacilityForgeUser(AbstractUser):
         blank=True,
         null=True
     )
-    team = models.ManyToManyField(
-        'Team',
-        related_name='members',
-        blank=True,
-    )
+
     # facilities = models.ManyToManyField(
     #     'facilities.Facility',
     #     related_name='users',
@@ -31,6 +27,18 @@ class FacilityForgeUser(AbstractUser):
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
+    manager = models.ForeignKey(
+        FacilityForgeUser,
+        on_delete=models.CASCADE,
+        related_name='team_manager',
+        blank=True,
+        null=True
+    )
+    members = models.ManyToManyField(
+        FacilityForgeUser,
+        related_name='teams',
+        blank=True
+    )
     # tickets = models.ManyToManyField(
     #     'tickets.Ticket',
     #     related_name='teams',
