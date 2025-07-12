@@ -1,5 +1,7 @@
 from django.urls import path
 
-urlpatterns = [
+from facilities.views import FacilityManagement
 
+urlpatterns = [
+    path('', FacilityManagement.as_view(), name='facilityManagement'),
 ]
