@@ -1,0 +1,25 @@
+<!-- Sidebar for md and up -->
+<nav class="col-md-3 col-lg-2 bg-white border-end p-4 min-vh-100 d-none d-md-block">
+    <h5 class="fw-bold mb-4">My Account</h5>
+    <ul class="nav flex-column">
+        <li class="nav-item"><a class="nav-link text-dark active" href="#">Profile</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="#">Facilities</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="#">Teams</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="#">Customers</a>
+        </li>
+        <li class="nav-item"><a class="nav-link text-dark" href="#">Tickets</a></li>
+    </ul>
+</nav>
+<!-- Dropdown Nav (Mobile) -->
+<div class="container d-block d-md-none my-3">
+    <label for="side-nav-selector">
+        <select id="side-nav-selector" class="form-select" onchange="location = this.value;">
+            <option value="#">Profile</option>
+            <option value="#">Facilities</option>
+            <option value="#">Teams</option>
+            <option value="#">Customers</option>
+            <option value="#">Tickets</option>
+        </select>
+    </label>
+</div>
+
