@@ -1,0 +1,23 @@
+{% extends 'account_management/acc_management_base.html' %}
+
+{% block main_content %}
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="mb-0">Facilities</h3>
+        <a href="#" class="btn btn-primary" style="background-color: #00D1B2; border: none;">
+            <i class="bi bi-plus-lg me-1"></i> Create New
+        </a>
+    </div>
+
+    <!-- Example facilities list (replace with real loop) -->
+    <div class="list-group">
+        {% for facility in user.facilities %}
+            <a href="#" class="list-group-item list-group-item-action">
+                {{ facility.name }}
+            </a>
+        {% empty %}
+            <div class="text-muted">No facilities available.</div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
