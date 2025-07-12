@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section class="flex-grow-1 d-flex flex-column" style="background-color: #f8f9fa;">
+        <div class="container-fluid">
+            <div class="row">
+                {% include 'account_management/side_nav.html' %}
+
+                <div class="flex-grow-1 col-md-9 ms-sm-auto col-lg-10 px-4 py-5">
+                    <div id="profile" class="section active">
+                        <div class="card shadow-sm p-4 mb-4">
+                            {% block main_content %}
+
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
