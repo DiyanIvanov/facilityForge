@@ -20,6 +20,11 @@ class FacilityForgeUser(AbstractUser):
     #     related_name='users',
     #     blank=True,
     # )
+    # applications = models.ManyToManyField(
+    #     'applications.Application',
+    #     related_name='users',
+    #     blank=True
+    # )
 
     def __str__(self):
         return self.username
