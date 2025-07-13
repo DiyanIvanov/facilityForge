@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     'accounts.apps.AccountsConfig',
     'common.apps.CommonConfig',
+    'facilities.apps.FacilitiesConfig',
 ]
 
 MIDDLEWARE = [
