@@ -22,11 +22,13 @@ class Facility(models.Model):
     )
     owner = models.ForeignKey(
         'accounts.FacilityForgeUser',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='owned_facilities',
     )
     manager = models.ForeignKey(
         'accounts.FacilityForgeUser',
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='managed_facilities',
     )
     users = models.ManyToManyField(
         'accounts.FacilityForgeUser',
