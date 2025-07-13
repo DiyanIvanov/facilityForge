@@ -1,7 +1,9 @@
 from django.urls import path
 
-from facilities.views import FacilityManagement
+from facilities.views import FacilityManagement, CreateFacility
 
 urlpatterns = [
-    path('', FacilityManagement.as_view(), name='facilityManagement'),
+    path('', FacilityManagement.as_view(), name='facilities'),
+    path('create/', CreateFacility.as_view(), name='create-facility'),
+
 ]
