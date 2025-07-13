@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, FormView
@@ -19,7 +20,7 @@ class RegisterView(CreateView):
     success_url = reverse_lazy('index')
 
 
-class EditProfileView(FormView):
+class EditProfileView(LoginRequiredMixin, FormView):
     model = UserModel
     form_class = EditProfileForm
     template_name = 'accounts/edit-user.html'
