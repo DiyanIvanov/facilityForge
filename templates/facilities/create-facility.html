@@ -1,0 +1,8 @@
+{% extends 'account_management/acc_management_base.html' %}
+
+{% block main_content %}
+
+    {% csrf_token %}
+    {{ form }}
+
+{% endblock %}
