@@ -1,9 +1,9 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, FormView
 
-from accounts.forms import CustomRegisterForm
+from accounts.forms import CustomRegisterForm, EditProfileForm
 
 UserModel = get_user_model()
 
@@ -17,3 +17,15 @@ class RegisterView(CreateView):
     form_class = CustomRegisterForm
     template_name = 'accounts/register-page.html'
     success_url = reverse_lazy('index')
+
+
+class EditProfileView(FormView):
+    model = UserModel
+    form_class = EditProfileForm
+    template_name = 'accounts/edit-user.html'
+    success_url = reverse_lazy('dashboard')
+
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
