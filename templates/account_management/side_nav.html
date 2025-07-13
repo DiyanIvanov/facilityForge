@@ -3,7 +3,7 @@
     <h5 class="fw-bold mb-4">My Account</h5>
     <ul class="nav flex-column">
         <li class="nav-item"><a class="nav-link text-dark active" href="#">Profile</a></li>
-        <li class="nav-item"><a class="nav-link text-dark" href="#">Facilities</a></li>
+        <li class="nav-item"><a class="nav-link text-dark" href="{% url 'facilities' %}">Facilities</a></li>
         <li class="nav-item"><a class="nav-link text-dark" href="#">Teams</a></li>
         <li class="nav-item"><a class="nav-link text-dark" href="#">Customers</a>
         </li>
@@ -15,7 +15,7 @@
     <label for="side-nav-selector">
         <select id="side-nav-selector" class="form-select" onchange="location = this.value;">
             <option value="#">Profile</option>
-            <option value="#">Facilities</option>
+            <option value="{% url 'facilities' %}">Facilities</option>
             <option value="#">Teams</option>
             <option value="#">Customers</option>
             <option value="#">Tickets</option>
