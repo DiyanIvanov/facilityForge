@@ -1,12 +1,14 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView
-
+from django.views.generic import TemplateView, CreateView, ListView
+from facilities.models import Facility
 from facilities.forms import CreateFacilityForm
 
 
-class FacilityManagement(TemplateView):
+class FacilityManagement(LoginRequiredMixin, ListView):
     template_name = 'facilities/facilities.html'
+    model = Facility
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -14,7 +16,7 @@ class FacilityManagement(TemplateView):
         return context
 
 
-class CreateFacility(CreateView):
+class CreateFacility(LoginRequiredMixin, CreateView):
     template_name = 'facilities/create-facility.html'
     form_class = CreateFacilityForm
     success_url = reverse_lazy('facilities')
