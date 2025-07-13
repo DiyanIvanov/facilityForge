@@ -1,8 +1,48 @@
 {% extends 'account_management/acc_management_base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
 
 {% block main_content %}
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 65vh;">
+        <div class="card shadow p-4" style="width: 400px;">
 
-    {% csrf_token %}
-    {{ form }}
+            <div class="text-center mb-4">
+                <img src="{% static 'images/logo.png' %}" alt="FacilityForge Logo" width="80" height="80"
+                     class="rounded-circle mb-3">
+                <h2 class="h4">Create Facility</h2>
+            </div>
+
+            {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    Invalid username or password.
+                </div>
+            {% endif %}
+
+            <form method="POST" action="{% url 'create-facility' %}">
+                {% csrf_token %}
+
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {% render_field field class="form-control" %}
+                        {% if field.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in field.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+                <br>
+                <div class="mb-3, d-grid">
+                    <button type="submit" class="btn btn-primary" style="background-color: #00D1B2; border: none">
+                        Create
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
 {% endblock %}
