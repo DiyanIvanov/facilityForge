@@ -19,14 +19,15 @@ class IndexPageView(TemplateView):
 
 class AboutPageView(TemplateView):
     template_name = 'common/about.html'
-    #todo add tickets and facilities data when models are ready
-    extra_context = {
-        'tickets': None,
-        'facilities': None,
-    }
+
 
 @method_decorator(never_cache, name='dispatch')
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = 'common/dashboard.html'
 
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tickets'] = None
+        # todo: add all facilities user is involved wit, when custom manager is implemented
+        context['facilities'] = self.request.user.owned_facilities.all()
+        return context
