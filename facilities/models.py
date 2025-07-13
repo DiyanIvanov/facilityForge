@@ -20,6 +20,14 @@ class Facility(models.Model):
         blank=True,
         null=True
     )
+    status = models.CharField(
+        max_length=20,
+        choices=[
+            ('active', 'Active'),
+            ('inactive', 'Inactive'),
+        ],
+        default='active'
+    )
     owner = models.ForeignKey(
         'accounts.FacilityForgeUser',
         on_delete=models.CASCADE,
@@ -29,17 +37,21 @@ class Facility(models.Model):
         'accounts.FacilityForgeUser',
         on_delete=models.CASCADE,
         related_name='managed_facilities',
+        blank=True,
+        null=True
     )
-    users = models.ManyToManyField(
+    tenants = models.ManyToManyField(
         'accounts.FacilityForgeUser',
-        related_name='facilities',
-        blank=True
+        related_name='used_facilities',
+        blank=True,
+        null=True
     )
     engineering_team = models.ForeignKey(
         'accounts.Team',
         on_delete=models.CASCADE,
         related_name='engineering_facilities',
         blank=True,
+        null=True
     )
 
     def __str__(self):
