@@ -32,22 +32,29 @@ class FacilityForgeUser(AbstractUser):
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)
+    moto = models.CharField(max_length=200, blank=True, null=True)
+    team_owner = models.ForeignKey(
+        FacilityForgeUser,
+        on_delete=models.CASCADE,
+        related_name='owned_teams',
+    )
     manager = models.ForeignKey(
         FacilityForgeUser,
         on_delete=models.CASCADE,
-        related_name='team_manager',
-        blank=True,
-        null=True
+        related_name='managed_teams',
     )
     members = models.ManyToManyField(
         FacilityForgeUser,
         related_name='teams',
-        blank=True
+        blank=True,
+        null=True
     )
     # tickets = models.ManyToManyField(
     #     'tickets.Ticket',
     #     related_name='teams',
     #     blank=True,
+    #     null=True
     # )
 
     def __str__(self):
