@@ -12,8 +12,16 @@
 
     <div class="list-group">
         {% for facility in facilities %}
-            <a href="#" class="list-group-item list-group-item-action">
-                {{ facility.name }}
+            <a href="#" class="list-group-item list-group-item-action py-3 mb-3 border-1 rounded-3 shadow-sm">
+                <div class="d-flex w-100 justify-content-between align-items-center">
+                    <h5 class="mb-1">{{ facility.name }}</h5>
+                    <small class="text-muted">{{ facility.tenants.count }} tenant{{ facility.tenants.count|pluralize }}</small>
+                </div>
+                <p class="mb-1 fst-italic text-secondary">{{ facility.description }}</p>
+                <div class="small">
+                    <strong>Owner:</strong> {{ facility.owner.get_full_name|default:facility.owner.username }} &nbsp;|&nbsp;
+                    <strong>Manager:</strong> {{ facility.manager.get_full_name|default:facility.manager.username }}
+                </div>
             </a>
         {% empty %}
             <div class="text-muted">No facilities available.</div>
