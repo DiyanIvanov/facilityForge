@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
+from accounts.models import Team
 
 
 class  CustomRegisterForm(UserCreationForm):
@@ -20,3 +21,10 @@ class EditProfileForm(forms.ModelForm):
         self.fields['email'].widget.attrs.update({'class': 'form-control'})
         self.fields['first_name'].widget.attrs.update({'class': 'form-control'})
         self.fields['last_name'].widget.attrs.update({'class': 'form-control'})
+
+
+class CreateTeamForm(forms.ModelForm):
+    class Meta:
+        model = Team
+        fields = ('name', 'moto', 'description')
+
