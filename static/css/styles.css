@@ -1,9 +1,10 @@
 .main-color {
-   color: #00D1B2;
+    color: #00D1B2;
 }
 
 .main-color-bg {
-   background-color: #00D1B2;
+    background-color: #00D1B2;
+    color: white;
 }
 
 .custom-nav-link {
@@ -12,7 +13,17 @@
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
 
-  }
+}
+
+.main-btn {
+    background-color: #00D1B2;
+    border: none;
+}
+
+.main-ng-btn {
+    background-color: #FF3860;
+    border: none;
+}
 
 .navbar-nav .nav-item + .nav-item {
    margin-left: 0.80rem;
