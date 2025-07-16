@@ -15,14 +15,15 @@
 
 }
 
-.main-btn {
-    background-color: #00D1B2;
-    border: none;
+.btn-danger {
+  background-color: #FF3860;
+  border-color: #FF3860;
+  color: white;
 }
 
-.main-ng-btn {
-    background-color: #FF3860;
-    border: none;
+.btn-danger:hover {
+  background-color: #e52e55;
+  border-color: #e52e55;
 }
 
 .navbar-nav .nav-item + .nav-item {
@@ -38,6 +39,25 @@
     background-color: #00D1B2;
     color: white;
     border-color: #00D1B2;
+}
+
+.btn-outline-primary:focus,
+.btn-outline-primary.focus,
+.btn-outline-primary:focus-visible {
+  box-shadow: 0 0 0 0.25rem rgba(0, 209, 178, 0.5);
+  outline: none;
+  border-color: #00D1B2;
+}
+
+.btn-primary {
+  background-color: #00D1B2;
+  border-color: #00D1B2;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #00b39c; /* slightly darker for hover effect */
+  border-color: #00b39c;
 }
 
 /*body {*/
