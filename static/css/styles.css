@@ -29,6 +29,17 @@
    margin-left: 0.80rem;
 }
 
+.btn-outline-primary {
+    color: #00D1B2;
+    border-color: #00D1B2;
+}
+
+.btn-outline-primary:hover {
+    background-color: #00D1B2;
+    color: white;
+    border-color: #00D1B2;
+}
+
 /*body {*/
 /*   font-family: 'Nunito Sans', sans-serif;*/
 /*}*/
