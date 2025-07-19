@@ -1,4 +1,6 @@
 from django import forms
+from applications.models import Applications
+
 
 class ApplicationForm(forms.Form):
     application_id = forms.IntegerField()
@@ -8,3 +10,10 @@ class ApplicationForm(forms.Form):
             ('reject', 'Reject')
         ],
     )
+
+
+class TeamOrFacilityApplicationForm(forms.ModelForm):
+    class Meta:
+        model = Applications
+        fields = ('description',)
+
