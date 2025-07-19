@@ -1,14 +1,15 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
+from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, FormView, TemplateView
+from django.views.generic import ListView, FormView, TemplateView, CreateView
 from django.apps import apps
-from applications.forms import ApplicationForm
+from applications.forms import ApplicationForm, TeamOrFacilityApplicationForm
 from applications.models import Applications
 
 
 # Create your views here.
-class ApplicationView(LoginRequiredMixin, ListView):
+class ApplicationsView(LoginRequiredMixin, ListView):
     template_name = 'applications/applications.html'
     model = Applications
     context_object_name = 'applications'
@@ -96,3 +97,22 @@ class SearchFacilitiesAndTeamsView(LoginRequiredMixin, View):
             })
 
         return JsonResponse({'results': results}, safe=False)
+
+
+class  TeamApplicationView(LoginRequiredMixin, CreateView):
+    template_name = 'applications/team-application.html'
+    form_class = TeamOrFacilityApplicationForm
+    success_url = reverse_lazy('applications')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['team'] = apps.get_model(app_label='accounts', model_name='Team').objects.get(pk=self.kwargs['pk'])
+        return context
+
+    def form_valid(self, form):
+        team = apps.get_model(app_label='accounts', model_name='Team').objects.get(pk=self.kwargs['pk'])
+        form.instance.applicant = self.request.user
+        form.instance.team = team
+        form.instance.status = 'pending'
+        form.save()
+        return super().form_valid(form)
