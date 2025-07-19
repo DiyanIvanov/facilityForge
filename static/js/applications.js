@@ -1,13 +1,72 @@
 const searchInput = document.getElementById('searchInput');
-const listItems = document.querySelectorAll('#teamList li');
+const resultsContainer = document.getElementById('teamList');
 
 searchInput.addEventListener('input', function () {
-    const searchTerm = this.value.toLowerCase();
-    listItems.forEach(item => {
-        const text = item.innerText.toLowerCase();
-        item.style.display = text.includes(searchTerm) ? '' : 'none';
-    });
+    const query = this.value;
+
+    if (query.length < 0) {
+        resultsContainer.innerHTML = '';  // Clear if input is too short
+        return;
+    }
+
+    fetch(`/applications/search/?q=${encodeURIComponent(query)}`)
+        .then(res => res.json())
+        .then(data => {
+            renderResults(data.results);
+        });
 });
+
+function renderResults(results) {
+    const listContainer = document.getElementById('teamList');
+    listContainer.innerHTML = ''; // Clear previous entries
+
+    if (results.length === 0) {
+        const emptyItem = document.createElement('li');
+        emptyItem.className = 'list-group-item';
+        emptyItem.textContent = 'No results found.';
+        listContainer.appendChild(emptyItem);
+        return;
+    }
+
+    results.forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+
+        // Content div
+        const infoDiv = document.createElement('div');
+        const nameEl = document.createElement('strong');
+        nameEl.textContent = item.name;
+
+        const subEl = document.createElement('small');
+        subEl.className = 'text-muted d-block';
+        if (item.type === 'team') {
+            subEl.textContent = item.moto || 'Team info not available';
+        } else if (item.type === 'facility') {
+            subEl.textContent = item.location || 'Facility location unknown';
+        }
+
+        infoDiv.appendChild(nameEl);
+        infoDiv.appendChild(document.createElement('br'));
+        infoDiv.appendChild(subEl);
+
+        // Button
+        const button = document.createElement('button');
+        button.className = 'btn btn-sm btn-outline-primary';
+        button.textContent = 'Apply';
+        button.onclick = () => applyTo(item.type, item.id);
+
+        // Combine
+        li.appendChild(infoDiv);
+        li.appendChild(button);
+
+        listContainer.appendChild(li);
+    });
+}
+
+function applyTo(type, id) {
+    // Replace this with your actual application logic or form submission
+    alert(`Applying to ${type} with ID ${id}`);
+}
 
 function getCookie(name) {
     let cookieValue = null;
