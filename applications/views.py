@@ -116,3 +116,23 @@ class  TeamApplicationView(LoginRequiredMixin, CreateView):
         form.instance.status = 'pending'
         form.save()
         return super().form_valid(form)
+
+
+class FacilityApplicationView(LoginRequiredMixin, CreateView):
+    template_name = 'applications/facility-application.html'
+    form_class = TeamOrFacilityApplicationForm
+    success_url = reverse_lazy('applications')
+    facility_model = apps.get_model(app_label='facilities', model_name='Facility')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['facility'] = self.facility_model.objects.get(pk=self.kwargs['pk'])
+        return context
+
+    def form_valid(self, form):
+        facility = self.facility_model.objects.get(pk=self.kwargs['pk'])
+        form.instance.applicant = self.request.user
+        form.instance.facility = facility
+        form.instance.status = 'pending'
+        form.save()
+        return super().form_valid(form)
