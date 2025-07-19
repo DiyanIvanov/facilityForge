@@ -21,7 +21,7 @@
                                 <strong>{{ team.name }}</strong><br>
                                 <small class="text-muted">{{ team.moto }}</small>
                             </div>
-                            <button class="btn btn-sm btn-outline-primary">Apply</button>
+                            <a href="{% url 'team_application' team.pk %}" class="btn btn-sm btn-outline-primary">Apply</a>
                         </li>
                     {% endfor %}
                     {% for facility in facilities %}
