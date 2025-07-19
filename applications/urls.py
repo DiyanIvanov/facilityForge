@@ -1,7 +1,7 @@
 from django.urls import path, include
 
 from applications.views import ApplicationsView, AcceptOrRejectApplicationView, SearchFacilitiesAndTeamsView, \
-    TeamApplicationView
+    TeamApplicationView, FacilityApplicationView
 
 urlpatterns = [
     path('', ApplicationsView.as_view(), name='applications'),
@@ -9,5 +9,6 @@ urlpatterns = [
     path('search/', SearchFacilitiesAndTeamsView.as_view(), name='search_facilities_and_teams'),
     path('<int:pk>/', include([
         path('team-application/', TeamApplicationView.as_view(), name='team_application'),
+        path('facility-application/', FacilityApplicationView.as_view(), name='facility_application')
     ])),
 ]
