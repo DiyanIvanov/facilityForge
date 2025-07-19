@@ -30,7 +30,7 @@
                                 <strong>{{ facility.name }}</strong><br>
                                 <small class="text-muted">{{ facility.location }}</small>
                             </div>
-                            <button class="btn btn-sm btn-outline-primary">Apply</button>
+                            <a href="{% url 'facility_application' facility.pk %}" class="btn btn-sm btn-outline-primary">Apply</a>
                         </li>
                     {% endfor %}
                 </ul>
