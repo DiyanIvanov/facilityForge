@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container mt-5" style="max-width: 600px;">
+        <div class="card shadow-sm">
+            <div class="card-header main-color-bg">
+                <h5 class="mb-0">Apply to {{ facility.name }} based in {{ facility.location }}</h5>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% if form.description.errors %}
+                        <div class="text-danger small">
+                            {{ form.description.errors }}
+                        </div>
+                    {% endif %}
+                    <div class="form-group mb-3">
+                        <label for="description">Why do you want to join?</label>
+                        <textarea class="form-control" id="description" name="description" rows="4"
+                                  placeholder="Write your motivation here..."></textarea>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary">Submit Application</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
