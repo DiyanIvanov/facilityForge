@@ -51,8 +51,10 @@
                         <div class="mb-3 border-bottom pb-2">
                             <div><strong>John Doe</strong> applied to <em>Team A</em> — <small>2024-07-14</small></div>
                             <div class="mt-2">
-                                <button class="btn btn-sm btn-success me-2 btn-primary">Accept</button>
-                                <button class="btn btn-sm btn-danger btn-danger">Reject</button>
+                                <button class="btn btn-sm btn-success me-2 btn-primary"
+                                        onclick="submitAction(1, 'accept')">Accept</button>
+                                <button class="btn btn-sm btn-danger btn-danger"
+                                        onclick="submitAction(1, 'reject')">Reject</button>
                             </div>
                         </div>
 
@@ -70,19 +72,8 @@
         </div>
     </div>
 
-    <!-- Optional: Live Search Script -->
-    <script>
-        const searchInput = document.getElementById('searchInput');
-        const listItems = document.querySelectorAll('#teamList li');
+{% endblock %}
 
-        searchInput.addEventListener('input', function () {
-            const searchTerm = this.value.toLowerCase();
-            listItems.forEach(item => {
-                const text = item.innerText.toLowerCase();
-                item.style.display = text.includes(searchTerm) ? '' : 'none';
-            });
-        });
-    </script>
-
-
+{% block scripts %}
+    <script src="{% static 'js/applications.js'%}"></script>
 {% endblock %}
