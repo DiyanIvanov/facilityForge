@@ -103,6 +103,7 @@ function submitAction(applicationId, action) {
             } else {
                 alert(data.error || 'Action failed');
             }
-        })
+        }
+    )
 }
 
