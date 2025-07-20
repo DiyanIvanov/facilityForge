@@ -20,7 +20,7 @@ class ApplicationsView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['teams'] = apps.get_model('accounts', 'Team').objects.all()
+        context['teams'] = apps.get_model('accounts', 'Team').objects.teams_user_is_not_involved_in(self.request.user)
         context['facilities'] = apps.get_model('facilities', 'Facility').objects.all()
         return context
 
@@ -37,7 +37,7 @@ class AcceptOrRejectApplicationView(LoginRequiredMixin, FormView):
             # todo: check if the user is allowed to accept or reject this application
             # For now, we assume the user is allowed to accept or reject any application
             if action == 'accept':
-                application.status = 'approved'
+                self.accept_application(application)
             elif action == 'reject':
                 application.status = 'rejected'
             elif action == 'cancel':
@@ -64,6 +64,22 @@ class AcceptOrRejectApplicationView(LoginRequiredMixin, FormView):
             'form_errors': form.errors
         }, status=400)
 
+    def accept_application(self, application):
+        application.status = 'approved'
+        if application.team and application.facility:
+            # If both team and facility are present, we assume the application is for a team to use a facility
+            application.facility.engineering_teams.add(application.team)
+            application.facility.save()
+        elif application.team:
+            # If only team is present, we assume the application is for a team
+            application.team.members.add(application.applicant)
+            application.team.save()
+        elif application.facility:
+            # If only facility is present, we assume the application is for a facility
+            application.facility.tenants.add(application.applicant)
+            application.facility.save()
+        application.save()
+        return 0
 
 class SearchFacilitiesAndTeamsView(LoginRequiredMixin, View):
     teams_model = apps.get_model('accounts', 'Team')
@@ -74,7 +90,7 @@ class SearchFacilitiesAndTeamsView(LoginRequiredMixin, View):
         query = request.GET.get('q', '')
         results = []
 
-        teams = self.teams_model.objects.all()
+        teams = self.teams_model.objects.teams_user_is_not_involved_in(request.user)
         facilities = self.facility_model.objects.all()
 
         if query:
