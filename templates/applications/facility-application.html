@@ -15,10 +15,23 @@
                             {{ form.description.errors }}
                         </div>
                     {% endif %}
+
+
                     <div class="form-group mb-3">
                         <label for="description">Why do you want to join?</label>
-                        <textarea class="form-control" id="description" name="description" rows="4"
+                        <textarea class="form-control" id="description" name="description" rows="10"
                                   placeholder="Write your motivation here..."></textarea>
+                    </div>
+
+                    {% if form.team.errors %}
+                        <div class="text-danger small">
+                            {{ form.team.errors }}
+                        </div>
+                    {% endif %}
+                    <div class="form-group mb-3">
+                        <label for="{{ form.team.id_for_label }}">Apply as (optional):</label>
+                        {{ form.team }}
+                        <small class="form-text text-muted">Leave empty to apply as yourself.</small>
                     </div>
 
                     <div class="text-end">
