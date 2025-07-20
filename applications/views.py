@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, FormView, TemplateView, CreateView
 from django.apps import apps
-from applications.forms import ApplicationForm, TeamOrFacilityApplicationForm
+from applications.forms import ApplicationForm, TeamApplicationForm, FacilityApplicationForm
 from applications.models import Applications
 
 
@@ -101,7 +101,7 @@ class SearchFacilitiesAndTeamsView(LoginRequiredMixin, View):
 
 class  TeamApplicationView(LoginRequiredMixin, CreateView):
     template_name = 'applications/team-application.html'
-    form_class = TeamOrFacilityApplicationForm
+    form_class = TeamApplicationForm
     success_url = reverse_lazy('applications')
 
     def get_context_data(self, **kwargs):
@@ -120,7 +120,7 @@ class  TeamApplicationView(LoginRequiredMixin, CreateView):
 
 class FacilityApplicationView(LoginRequiredMixin, CreateView):
     template_name = 'applications/facility-application.html'
-    form_class = TeamOrFacilityApplicationForm
+    form_class = FacilityApplicationForm
     success_url = reverse_lazy('applications')
     facility_model = apps.get_model(app_label='facilities', model_name='Facility')
 
@@ -128,6 +128,11 @@ class FacilityApplicationView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context['facility'] = self.facility_model.objects.get(pk=self.kwargs['pk'])
         return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         facility = self.facility_model.objects.get(pk=self.kwargs['pk'])
