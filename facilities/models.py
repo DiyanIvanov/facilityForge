@@ -1,5 +1,7 @@
 from django.db import models
 
+from facilities.managers import FacilityManager
+
 
 class Facility(models.Model):
     name = models.CharField(
@@ -50,6 +52,8 @@ class Facility(models.Model):
         related_name='serviced_facilities',
         blank=True,
     )
+
+    objects = FacilityManager()
 
     def __str__(self):
         return self.name
