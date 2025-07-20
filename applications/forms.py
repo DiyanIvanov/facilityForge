@@ -5,14 +5,14 @@ from applications.models import Applications
 
 
 class ApplicationForm(forms.Form):
-    application_id = forms.IntegerField()
+    id = forms.IntegerField()
     action = forms.ChoiceField(
         choices=[
             ('accept', 'Accept'),
-            ('reject', 'Reject')
+            ('reject', 'Reject'),
+            ('cancel', 'Cancel')
         ],
     )
-
 
 class TeamApplicationForm(forms.ModelForm):
     class Meta:
@@ -35,6 +35,3 @@ class FacilityApplicationForm(forms.ModelForm):
             self.fields['team'].queryset = apps.get_model('accounts', 'Team').objects.filter(
                 Q(team_owner=user) | Q(manager=user)
             ).distinct()
-            self.fields['team'].required = False
-            self.fields['team'].label = "Apply as team (optional)"
-            self.fields['team'].widget.attrs.update({'class': 'form-select'})
