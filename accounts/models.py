@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from accounts.managers import TeamManager
+
 
 # Create your models here.
 class FacilityForgeUser(AbstractUser):
@@ -48,7 +50,6 @@ class Team(models.Model):
         FacilityForgeUser,
         related_name='teams',
         blank=True,
-        null=True
     )
     # tickets = models.ManyToManyField(
     #     'tickets.Ticket',
@@ -56,6 +57,8 @@ class Team(models.Model):
     #     blank=True,
     #     null=True
     # )
+
+    objects = TeamManager()
 
     def __str__(self):
         return self.name
