@@ -1,15 +1,16 @@
 from django.db import models
-
+from applications.managers import ApplicationModelManager
 
 class Applications(models.Model):
-    application_id = models.CharField(max_length=100)
     description = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
         max_length=20,
         choices=[
             ('pending', 'Pending'),
             ('approved', 'Approved'),
             ('rejected', 'Rejected'),
+            ('cancel', 'Cancelled')
         ],
         default='pending'
     )
@@ -33,8 +34,10 @@ class Applications(models.Model):
         null=True
     )
 
+    objects = ApplicationModelManager()
+
     def __str__(self):
-        return self.application_id
+        return f'{self.pk}-{self.status}'
 
     class Meta:
         verbose_name = 'Application'
