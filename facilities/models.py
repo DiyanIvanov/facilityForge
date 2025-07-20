@@ -44,14 +44,11 @@ class Facility(models.Model):
         'accounts.FacilityForgeUser',
         related_name='used_facilities',
         blank=True,
-        null=True
     )
-    engineering_team = models.ForeignKey(
+    engineering_teams = models.ManyToManyField(
         'accounts.Team',
-        on_delete=models.CASCADE,
-        related_name='engineering_facilities',
+        related_name='serviced_facilities',
         blank=True,
-        null=True
     )
 
     def __str__(self):
