@@ -1,20 +1,16 @@
-const searchInput = document.getElementById('searchInput');
-const resultsContainer = document.getElementById('teamList');
+function runSearch() {
+    const searchInput = document.getElementById('searchInput');
+    const query = searchInput.value;
 
-searchInput.addEventListener('input', function () {
-    const query = this.value;
 
-    if (query.length < 0) {
-        resultsContainer.innerHTML = '';  // Clear if input is too short
-        return;
-    }
+        fetch(`/applications/search/?q=${encodeURIComponent(query)}`)
+            .then(res => res.json())
+            .then(data => {
+                renderResults(data.results);
+            });
+}
 
-    fetch(`/applications/search/?q=${encodeURIComponent(query)}`)
-        .then(res => res.json())
-        .then(data => {
-            renderResults(data.results);
-        });
-});
+document.getElementById('searchInput').addEventListener('input', runSearch);
 
 function renderResults(results) {
     const listContainer = document.getElementById('teamList');
@@ -100,6 +96,7 @@ function submitAction(applicationId, action) {
         .then(data => {
             if (data.success) {
                 document.getElementById(`application-${data.id}`).remove();
+                runSearch();
             } else {
                 alert(data.error || 'Action failed');
             }
