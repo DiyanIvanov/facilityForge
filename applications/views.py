@@ -15,7 +15,7 @@ class ApplicationsView(LoginRequiredMixin, ListView):
     context_object_name = 'applications'
 
     def get_queryset(self):
-        return Applications.objects.filter(applicant=self.request.user).order_by('-id')
+        return Applications.objects.pending_applications(self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -30,16 +30,18 @@ class AcceptOrRejectApplicationView(LoginRequiredMixin, FormView):
     template_name = 'applications/applications.html'
 
     def form_valid(self, form):
-        application_id = form.cleaned_data['application_id']
+        application_id = form.cleaned_data['id']
         action = form.cleaned_data['action']
         try:
-            application = Applications.objects.get(application_id=application_id)
+            application = Applications.objects.get(pk=application_id)
             # todo: check if the user is allowed to accept or reject this application
             # For now, we assume the user is allowed to accept or reject any application
             if action == 'accept':
                 application.status = 'approved'
             elif action == 'reject':
                 application.status = 'rejected'
+            elif action == 'cancel':
+                application.status = 'Cancelled'
 
             application.save()
             return JsonResponse({
