@@ -49,23 +49,23 @@ function renderResults(results) {
         infoDiv.appendChild(document.createElement('br'));
         infoDiv.appendChild(subEl);
 
-        // Button
-        const button = document.createElement('button');
-        button.className = 'btn btn-sm btn-outline-primary';
-        button.textContent = 'Apply';
-        button.onclick = () => applyTo(item.type, item.id);
+        // Link
+        const applyLink = document.createElement('a');
+        applyLink.className = 'btn btn-sm btn-outline-primary';
+        applyLink.textContent = 'Apply';
+
+        if (item.type === 'team') {
+            applyLink.href = `/applications/${item.pk}/team-application/`;
+        } else if (item.type === 'facility') {
+            applyLink.href = `/applications/${item.pk}/facility-application/`;
+        }
 
         // Combine
         li.appendChild(infoDiv);
-        li.appendChild(button);
+        li.appendChild(applyLink);
 
         listContainer.appendChild(li);
     });
-}
-
-function applyTo(type, id) {
-    // Replace this with your actual application logic or form submission
-    alert(`Applying to ${type} with ID ${id}`);
 }
 
 function getCookie(name) {
@@ -86,7 +86,7 @@ function getCookie(name) {
 
 function submitAction(applicationId, action) {
     const formData = new FormData();
-    formData.append('application_id', applicationId);
+    formData.append('id', applicationId);
     formData.append('action', action);
 
     fetch('/applications/accept-reject/', {
