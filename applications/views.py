@@ -21,7 +21,7 @@ class ApplicationsView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
 
         context['teams'] = apps.get_model('accounts', 'Team').objects.teams_user_is_not_involved_in(self.request.user)
-        context['facilities'] = apps.get_model('facilities', 'Facility').objects.all()
+        context['facilities'] = apps.get_model('facilities', 'Facility').objects.facilities_user_is_not_involved_in(self.request.user)
         return context
 
 
@@ -91,7 +91,7 @@ class SearchFacilitiesAndTeamsView(LoginRequiredMixin, View):
         results = []
 
         teams = self.teams_model.objects.teams_user_is_not_involved_in(request.user)
-        facilities = self.facility_model.objects.all()
+        facilities = self.facility_model.objects.facilities_user_is_not_involved_in(request.user)
 
         if query:
             teams = self.teams_model.objects.filter(name__icontains=query)
