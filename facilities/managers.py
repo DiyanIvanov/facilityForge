@@ -13,16 +13,6 @@ class FacilityManager(Manager):
                 Q(tenants=user) |
                 Q(engineering_teams__in=team_ids)
         )
-
-        # user_applied = Q(
-        #     applications__applicant=user,
-        #     applications__team__isnull=True,
-        #     applications__status__in=['pending', 'approved']
-        # )
-        #
-        # team_applied = Q(
-        #     applications__team__in=team_ids,
-        #     applications__status__in=['pending', 'approved']
-        # )
+        # Todo: Exclude facilities where user has applied individually or as part of a team
 
         return self.exclude(direct_involvement).distinct()
