@@ -14,9 +14,9 @@
 <div class="container d-block d-md-none my-3">
     <label for="side-nav-selector">
         <select id="side-nav-selector" class="form-select" onchange="location = this.value;">
-            <option value="{% url 'edit-profile' %}">Profile</option>
-            <option value="{% url 'facilities' %}">Facilities</option>
-            <option value="{% url 'teams' %}">Teams</option>
+            <option value="{% url 'edit-profile' %}" {% if request.resolver_match.url_name == 'edit-profile' %}selected{% endif %}>Profile</option>
+            <option value="{% url 'facilities' %}" {% if request.resolver_match.url_name == 'facilities' %}selected{% endif %}>Facilities</option>
+            <option value="{% url 'teams' %}" {% if request.resolver_match.url_name == 'teams' %}selected{% endif %}>Teams</option>
             <option value="#">Reporting</option>
             <option value="#">Tickets</option>
         </select>

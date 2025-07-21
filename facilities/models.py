@@ -1,5 +1,7 @@
 from django.db import models
 
+from facilities.managers import FacilityManager
+
 
 class Facility(models.Model):
     name = models.CharField(
@@ -44,15 +46,14 @@ class Facility(models.Model):
         'accounts.FacilityForgeUser',
         related_name='used_facilities',
         blank=True,
-        null=True
     )
-    engineering_team = models.ForeignKey(
+    engineering_teams = models.ManyToManyField(
         'accounts.Team',
-        on_delete=models.CASCADE,
-        related_name='engineering_facilities',
+        related_name='serviced_facilities',
         blank=True,
-        null=True
     )
+
+    objects = FacilityManager()
 
     def __str__(self):
         return self.name

@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="container my-5">
+    <div class="row">
+    <!-- Left Column: Search + Facility/Team List -->
+    <div class="col-12 col-md-5 mb-4 mb-md-0">
+        <!-- Search Box -->
+        <div class="mb-3 px-1">
+            <input type="text" class="form-control" id="searchInput"
+                   placeholder="Search facilities or teams...">
+        </div>
+
+        <!-- List of Facilities/Teams -->
+        <ul class="list-group" id="teamList" style="max-height: 500px; overflow-y: auto;">
+            {% for team in teams %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ team.name }}</strong><br>
+                        <small class="text-muted">{{ team.moto }}</small>
+                    </div>
+                    <a href="{% url 'team_application' team.pk %}"
+                       class="btn btn-sm btn-outline-primary">Apply</a>
+                </li>
+            {% endfor %}
+            {% for facility in facilities %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ facility.name }}</strong><br>
+                        <small class="text-muted">{{ facility.location }}</small>
+                    </div>
+                    <a href="{% url 'facility_application' facility.pk %}"
+                       class="btn btn-sm btn-outline-primary">Apply</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Right Column: Pending Applications -->
+    <div class="col-12 col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-header main-color-bg">
+                <h5 class="mb-0">Pending Applications</h5>
+            </div>
+            <div class="card-body">
+                <!-- Application Item -->
+                {% for application in applications %}
+                    {% if application.applicant.id == request.user.id %}
+                        <div class="mb-3 border-bottom pb-2" id="application-{{ application.pk }}">
+                        {% if application.team is not None and application.facility is not None %}
+                            <div><strong>Your team "{{ application.team }}"</strong> applied to
+                        {% else %}
+                            <div><strong>You have</strong> applied to
+                        {% endif %}
+                    {% if application.facility is None %}
+                        <em>{{ application.team }}</em> — <small>{{ application.created }}</small>
+                    {% else %}
+                        <em>{{ application.facility }}</em> — <small>{{ application.created }}</small>
+                    {% endif %}
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-danger btn-danger"
+                                onclick="submitAction({{ application.pk }}, 'cancel')">Cancel Application
+                        </button>
+                    </div>
+                    </div>
+                    {% else %}
+                        <div class="mb-3 border-bottom pb-2" id="application-{{ application.pk }}">
+                        {% if application.team is not None and application.facility is not None %}
+                            <div><strong>{{ application.team }}</strong> applied to
+                        {% else %}
+                            <div><strong>{{ application.applicant }}</strong> applied to
+                        {% endif %}
+                    {% if application.facility is None %}
+                        <em>{{ application.team }}</em> — <small>{{ application.created }}</small>
+                    {% else %}
+                        <em>{{ application.facility }}</em> — <small>{{ application.created }}</small>
+                    {% endif %}
+                    </div>
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-success me-2 btn-primary"
+                                onclick="submitAction({{ application.pk }}, 'accept')">Accept
+                        </button>
+                        <button class="btn btn-sm btn-danger btn-danger"
+                                onclick="submitAction({{ application.pk }}, 'reject')">Reject
+                        </button>
+                    </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'js/applications.js' %}"></script>
+{% endblock %}

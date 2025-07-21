@@ -1,9 +1,10 @@
 .main-color {
-   color: #00D1B2;
+    color: #00D1B2;
 }
 
 .main-color-bg {
-   background-color: #00D1B2;
+    background-color: #00D1B2;
+    color: white;
 }
 
 .custom-nav-link {
@@ -12,15 +13,52 @@
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
 
-  }
+}
+
+.btn-danger {
+  background-color: #FF3860;
+  border-color: #FF3860;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #e52e55;
+  border-color: #e52e55;
+}
 
 .navbar-nav .nav-item + .nav-item {
    margin-left: 0.80rem;
 }
 
-/*body {*/
-/*   font-family: 'Nunito Sans', sans-serif;*/
-/*}*/
+.btn-outline-primary {
+    color: #00D1B2;
+    border-color: #00D1B2;
+}
+
+.btn-outline-primary:hover {
+    background-color: #00D1B2;
+    color: white;
+    border-color: #00D1B2;
+}
+
+.btn-outline-primary:focus,
+.btn-outline-primary.focus,
+.btn-outline-primary:focus-visible {
+  box-shadow: 0 0 0 0.25rem rgba(0, 209, 178, 0.5);
+  outline: none;
+  border-color: #00D1B2;
+}
+
+.btn-primary {
+  background-color: #00D1B2;
+  border-color: #00D1B2;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #00b39c; /* slightly darker for hover effect */
+  border-color: #00b39c;
+}
 
 .bg-low {
     background-color: #00D1B2;
