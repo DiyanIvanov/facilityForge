@@ -81,7 +81,21 @@
                         <h5 class="mb-0">Recent Tickets</h5>
                     </div>
                     <div class="card-body" id="ticket-list">
-                        <!-- include "tickets/partial-tickets-list.html" with tickets=recent_tickets %} -->
+                        <ul class="list-group">
+                            {% for ticket in tickets %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a href="#" class="text-decoration-none text-dark flex-grow-1">
+                                        <div>
+                                            <strong>Facility: {{ ticket.facility.name }}</strong><br>
+                                            <small class="text-muted">{{ ticket.description }}</small>
+                                        </div>
+                                    </a>
+                                    <span class="badge bg-{{ ticket.priority|lower }} ms-3">{{ ticket.priority }}</span>
+                                </li>
+                            {% empty %}
+                                <li class="list-group-item text-muted">No tickets found.</li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
             </div>
