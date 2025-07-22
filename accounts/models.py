@@ -14,8 +14,8 @@ class FacilityForgeUser(AbstractUser):
     rating = models.PositiveSmallIntegerField(
         default=10,
         validators=[
-            models.MinValueValidator(1),
-            models.MaxValueValidator(10)
+            MinValueValidator(1),
+            MaxValueValidator(10)
         ]
     )
 
