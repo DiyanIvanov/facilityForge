@@ -3,6 +3,7 @@ from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
+from django.apps import apps
 
 
 # Create your views here.
@@ -27,7 +28,10 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['tickets'] = None
+        context['tickets'] = apps.get_model(
+            'tickets',
+            'Tickets'
+        ).objects.get_all_user_tickets(user=self.request.user)
         # todo: add all facilities user is involved wit, when custom manager is implemented
         context['facilities'] = self.request.user.owned_facilities.all()
         return context
