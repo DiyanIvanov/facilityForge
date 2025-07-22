@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 82vh;">
+        <div class="card shadow p-4" style="width: 400px;">
+            <div class="text-center mb-4">
+                <h2 class="h4">Create New Ticket</h2>
+            </div>
+
+            <!-- Error Alert -->
+            {% if form.errors %}
+                <div class="alert alert-danger" role="alert">
+                    Please fix the errors below.
+                </div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {% render_field field class="form-control" %}
+                        {% if field.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in field.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
+                <!-- Submit Button -->
+                <div class="d-grid mt-3">
+                    <button type="submit" class="btn btn-primary" style="background-color: #00D1B2; border: none;">
+                        Create Ticket
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+{% endblock %}

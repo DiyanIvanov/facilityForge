@@ -1,14 +1,20 @@
 from django.db import models
 
-from tickets.choices import TicketStatusChoices
+from tickets.choices import TicketStatusChoices, TicketPriorityChoices
+from tickets.managers import TicketManager
 
 
-class Ticket(models.Model):
+class Tickets(models.Model):
     title = models.CharField(max_length=255)
     status = models.CharField(
         max_length=50,
         choices=TicketStatusChoices.choices,
         default=TicketStatusChoices.OPEN
+    )
+    priority = models.CharField(
+        max_length=50,
+        choices=TicketPriorityChoices.choices,
+        default=TicketPriorityChoices.LOW
     )
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -30,6 +36,8 @@ class Ticket(models.Model):
         blank=True,
         related_name='assigned_tickets'
     )
+
+    objects = TicketManager()
 
     def __str__(self):
         return self.title
