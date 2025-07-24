@@ -34,9 +34,11 @@ class UpdateTicketForm(BaseTicketForm):
 
         if self.instance.facility.owner != user \
             or self.instance.assigned_to.members == user or self.instance.assigned_to.team_owner == user:
-            self.fields['status'].disabled = True
             self.fields['assigned_to'].disabled = True
+            self.fields['status'].disabled = True
 
+        if self.instance.assigned_to.members == user or self.instance.assigned_to.team_owner == user:
+            self.fields['status'].disabled = False
 
 
 class TicketMessageForm(ModelForm):
