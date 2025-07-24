@@ -22,11 +22,9 @@
                             <div style="flex: 1;">
                                 <label for="{{ form.facility.id_for_label }}">Facility: </label>
                                 {% render_field form.facility class="form-control" %}
-
                             </div>
                             <div style="flex: 1;">
                                 <label for="{{ form.status.id_for_label }}">Status: </label>
-                                {#                                {{ form.status }}#}
                                 {% render_field form.status class="form-control" %}
                             </div>
                         </div>
@@ -66,22 +64,23 @@
 
                     <!-- Messages list -->
                     <div class="messages-list" style="flex: 1; overflow-y: auto; margin-bottom: 20px;">
-                        <div class="message">
-                            <strong>User:</strong> I need my boiler fixed urgently.
-                        </div>
-                        <div class="message">
-                            <strong>Support:</strong> We have received your ticket and will dispatch an engineer
-                            shortly.
-                        </div>
-                        <div class="message">
-                            <strong>User:</strong> Thank you. Please make it before 5 PM.
-                        </div>
+                        {% for msg in  ticket_messages %}
+                            <div class="message">
+                                <strong>{{ msg.sender.username }}:</strong> {{ msg.content }}
+                            </div>
+                        {% empty %}
+                            <div class="message">
+                                No massages yet.
+                            </div>
+                        {% endfor %}
+
                     </div>
 
                     <!-- New message form -->
-                    <form method="post" action="#" style="display: flex; align-items: flex-start; gap: 10px;">
+                    <form method="post" action="{% url 'create-ticket-message' form.instance.id %}"
+                          style="display: flex; align-items: flex-start; gap: 10px;">
                         {% csrf_token %}
-                        <textarea name="message" rows="2" placeholder="Type your message..."
+                        <textarea name="content" rows="2" placeholder="Type your message..."
                                   style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #ccc;"></textarea>
                         <button type="submit"
                                 style="padding: 10px 20px; border: none; background-color: #17c3b2; color: white; border-radius: 4px; cursor: pointer; height: fit-content;">

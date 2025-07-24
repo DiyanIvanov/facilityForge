@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.forms import ModelForm
-from tickets.models import Tickets
+from tickets.models import Tickets, TicketMessages
 from django.apps import apps
 
 class BaseTicketForm(ModelForm):
@@ -24,7 +24,7 @@ class CreateTicketForm(BaseTicketForm):
 
 class UpdateTicketForm(BaseTicketForm):
     class Meta(BaseTicketForm.Meta):
-        fields = ['title', 'facility', 'status', 'priority', 'description', 'assigned_to']
+        fields = ['id', 'title', 'facility', 'status', 'priority', 'description', 'assigned_to']
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -37,3 +37,10 @@ class UpdateTicketForm(BaseTicketForm):
             self.fields['assigned_to'].disabled = True
         else:
             self.fields['assigned_to'].disabled = True
+
+
+class TicketMessageForm(ModelForm):
+    class Meta:
+        model = TicketMessages
+        fields = ['content']
+
