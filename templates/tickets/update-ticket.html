@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <div class="container my-5">
+        <div class="row">
+            <div class="ticket-container">
+                <div class="ticket-fields">
+                    <h3>Ticket Details</h3>
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <!-- Title (full width, value only) -->
+                        <div style="margin-bottom: 10px;">
+                            <label for="{{ form.instance.title.id_for_label }}">Title: </label>
+                            <div>{{ form.instance.title }}</div>
+                        </div>
+
+                        <!-- Facility and Status -->
+                        <div style="display: flex; gap: 10px; margin-bottom: 5px;">
+                            <div style="flex: 1;">
+                                <label for="{{ form.facility.id_for_label }}">Facility: </label>
+                                {% render_field form.facility class="form-control" %}
+
+                            </div>
+                            <div style="flex: 1;">
+                                <label for="{{ form.status.id_for_label }}">Status: </label>
+                                {#                                {{ form.status }}#}
+                                {% render_field form.status class="form-control" %}
+                            </div>
+                        </div>
+
+                        <!-- Priority -->
+                        <div class="mb-3">
+                            <label for="{{ form.priority.id_for_label }}">Priority</label>
+                            {% render_field form.priority class="form-control" %}
+                        </div>
+
+                        <!-- Description -->
+                        <div style="margin-bottom: 5px;">
+                            <label for="{{ form.description.id_for_label }}">Description</label>
+                            {% render_field form.description class="form-control" rows="6" %}
+                        </div>
+
+                        <!-- Assigned To Team and Created From -->
+                        <div style="margin-bottom: 5px;">
+                            <label for="{{ form.assigned_team.id_for_label }}">Assigned To Team</label>
+                            {% render_field form.assigned_to class="form-control" %}
+                        </div>
+
+                        <div>
+                            <label for="{{ form.created_from.id_for_label }}">Created by: </label>
+                            <div class="form-control">{{ form.instance.created_from }}</div>
+                        </div>
+                        <div class="d-grid mt-3">
+                            <button type="submit" class="btn btn-primary">
+                                Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="ticket-messages" style="display: flex; flex-direction: column; height: 100%;">
+                    <h3>Messages</h3>
+
+                    <!-- Messages list -->
+                    <div class="messages-list" style="flex: 1; overflow-y: auto; margin-bottom: 20px;">
+                        <div class="message">
+                            <strong>User:</strong> I need my boiler fixed urgently.
+                        </div>
+                        <div class="message">
+                            <strong>Support:</strong> We have received your ticket and will dispatch an engineer
+                            shortly.
+                        </div>
+                        <div class="message">
+                            <strong>User:</strong> Thank you. Please make it before 5 PM.
+                        </div>
+                    </div>
+
+                    <!-- New message form -->
+                    <form method="post" action="#" style="display: flex; align-items: flex-start; gap: 10px;">
+                        {% csrf_token %}
+                        <textarea name="message" rows="2" placeholder="Type your message..."
+                                  style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid #ccc;"></textarea>
+                        <button type="submit"
+                                style="padding: 10px 20px; border: none; background-color: #17c3b2; color: white; border-radius: 4px; cursor: pointer; height: fit-content;">
+                            Send
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
