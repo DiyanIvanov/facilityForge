@@ -11,13 +11,11 @@
                     <form method="post">
                         {% csrf_token %}
 
-                        <!-- Title (full width, value only) -->
                         <div style="margin-bottom: 10px;">
                             <label for="{{ form.instance.title.id_for_label }}">Title: </label>
                             <div>{{ form.instance.title }}</div>
                         </div>
 
-                        <!-- Facility and Status -->
                         <div style="display: flex; gap: 10px; margin-bottom: 5px;">
                             <div style="flex: 1;">
                                 <label for="{{ form.facility.id_for_label }}">Facility: </label>
