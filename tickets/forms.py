@@ -23,4 +23,17 @@ class CreateTicketForm(BaseTicketForm):
 
 
 class UpdateTicketForm(BaseTicketForm):
-    ...
+    class Meta(BaseTicketForm.Meta):
+        fields = ['title', 'facility', 'status', 'priority', 'description', 'assigned_to']
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        self.fields['title'].disabled = True
+        self.fields['facility'].disabled = True
+
+        if self.instance.facility.owner != user and self.instance.assigned_to.members == user:
+            self.fields['status'].disabled = True
+            self.fields['assigned_to'].disabled = True
+        else:
+            self.fields['assigned_to'].disabled = True

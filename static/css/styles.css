@@ -16,18 +16,18 @@
 }
 
 .btn-danger {
-  background-color: #FF3860;
-  border-color: #FF3860;
-  color: white;
+    background-color: #FF3860;
+    border-color: #FF3860;
+    color: white;
 }
 
 .btn-danger:hover {
-  background-color: #e52e55;
-  border-color: #e52e55;
+    background-color: #e52e55;
+    border-color: #e52e55;
 }
 
 .navbar-nav .nav-item + .nav-item {
-   margin-left: 0.80rem;
+    margin-left: 0.80rem;
 }
 
 .btn-outline-primary {
@@ -44,20 +44,20 @@
 .btn-outline-primary:focus,
 .btn-outline-primary.focus,
 .btn-outline-primary:focus-visible {
-  box-shadow: 0 0 0 0.25rem rgba(0, 209, 178, 0.5);
-  outline: none;
-  border-color: #00D1B2;
+    box-shadow: 0 0 0 0.25rem rgba(0, 209, 178, 0.5);
+    outline: none;
+    border-color: #00D1B2;
 }
 
 .btn-primary {
-  background-color: #00D1B2;
-  border-color: #00D1B2;
-  color: white;
+    background-color: #00D1B2;
+    border-color: #00D1B2;
+    color: white;
 }
 
 .btn-primary:hover {
-  background-color: #00b39c; /* slightly darker for hover effect */
-  border-color: #00b39c;
+    background-color: #00b39c; /* slightly darker for hover effect */
+    border-color: #00b39c;
 }
 
 .bg-low {
@@ -70,4 +70,59 @@
 
 .bg-high, .bg-critical {
     background-color: #FF3860;
+}
+
+.ticket-container {
+    display: flex;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.ticket-fields {
+    flex: 1;
+    padding: 20px;
+    border-right: 1px solid #e0e0e0;
+}
+
+.ticket-fields h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.field {
+    margin-bottom: 15px;
+}
+
+.field label {
+    display: block;
+    font-weight: bold;
+    color: #555;
+}
+
+.field span {
+    display: block;
+    margin-top: 5px;
+    color: #333;
+}
+
+.ticket-messages {
+    flex: 2;
+    padding: 20px;
+}
+
+.ticket-messages h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+.message {
+    border-left: 4px solid #17c3b2;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    color: #222;
+    background-color: transparent;
 }
