@@ -16,9 +16,10 @@ class TicketManager(Manager):
 
     def get_all_user_tickets(self, user):
         return self.filter(
-        Q(created_from=user) |
-        Q(facility__manager=user) |
-        Q(facility__owner=user) |
-        Q(assigned_to__manager=user) |
-        Q(assigned_to__members=user)
-    ).distinct()
+            (Q(created_from=user) |
+            Q(facility__manager=user) |
+            Q(facility__owner=user) |
+            Q(assigned_to__manager=user) |
+            Q(assigned_to__members=user)) &
+            Q(status__in=['open', 'in_progress', 'completed'])
+        ).distinct()
