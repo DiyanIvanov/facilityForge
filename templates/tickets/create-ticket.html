@@ -1,25 +1,23 @@
-{% extends 'account_management/acc_management_base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 {% load widget_tweaks %}
 
 
-{% block main_content %}
-    <div class="container d-flex justify-content-center align-items-center" style="min-height: 65vh;">
+{% block content %}
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 82vh;">
         <div class="card shadow p-4" style="width: 400px;">
-
             <div class="text-center mb-4">
-                <img src="{% static 'images/logo.png' %}" alt="FacilityForge Logo" width="80" height="80"
-                     class="rounded-circle mb-3">
-                <h2 class="h4">Create Facility</h2>
+                <h2 class="h4">Create New Ticket</h2>
             </div>
 
+            <!-- Error Alert -->
             {% if form.errors %}
                 <div class="alert alert-danger" role="alert">
-                    Invalid facility data.
+                    Please fix the errors below.
                 </div>
             {% endif %}
 
-            <form method="POST" action="{% url 'create-facility' %}">
+            <form method="POST">
                 {% csrf_token %}
 
                 {% for field in form %}
@@ -35,14 +33,15 @@
                         {% endif %}
                     </div>
                 {% endfor %}
-                <br>
-                <div class="mb-3, d-grid">
-                    <button type="submit" class="btn btn-primary" style="background-color: #00D1B2; border: none">
-                        Create
+
+                <!-- Submit Button -->
+                <div class="d-grid mt-3">
+                    <button type="submit" class="btn btn-primary" style="background-color: #00D1B2; border: none;">
+                        Create Ticket
                     </button>
                 </div>
             </form>
+
         </div>
     </div>
-
 {% endblock %}

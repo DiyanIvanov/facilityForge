@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 from accounts.managers import TeamManager
 
 
@@ -11,22 +11,14 @@ class FacilityForgeUser(AbstractUser):
         blank=True,
         null=True
     )
+    rating = models.PositiveSmallIntegerField(
+        default=10,
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(10)
+        ]
+    )
 
-    # facilities = models.ManyToManyField(
-    #     'facilities.Facility',
-    #     related_name='users',
-    #     blank=True,
-    # )
-    # tickets = models.ManyToManyField(
-    #     'tickets.Ticket',
-    #     related_name='users',
-    #     blank=True,
-    # )
-    # applications = models.ManyToManyField(
-    #     'applications.Application',
-    #     related_name='users',
-    #     blank=True
-    # )
 
     def __str__(self):
         return self.username
@@ -51,12 +43,11 @@ class Team(models.Model):
         related_name='teams',
         blank=True,
     )
-    # tickets = models.ManyToManyField(
-    #     'tickets.Ticket',
-    #     related_name='teams',
-    #     blank=True,
-    #     null=True
-    # )
+    tickets = models.ManyToManyField(
+        'tickets.Tickets',
+        related_name='teams',
+        blank=True,
+    )
 
     objects = TeamManager()
 

@@ -3,6 +3,7 @@ from django.urls import path, include
 from applications.views import ApplicationsView, AcceptOrRejectApplicationView, SearchFacilitiesAndTeamsView, \
     TeamApplicationView, FacilityApplicationView
 
+
 urlpatterns = [
     path('', ApplicationsView.as_view(), name='applications'),
     path('accept-reject/', AcceptOrRejectApplicationView.as_view(), name='accept_or_reject_application'),
