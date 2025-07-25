@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<section class="d-flex align-items-center justify-content-center text-center" style="min-height: 90vh;">
+  <div>
+    <div class="mb-4">
+      <img src="{% static 'images/logo.png' %}" alt="FacilityForge Logo" width="100" height="100" class="rounded-circle mb-4">
+      <h1 class="display-1 fw-bold" style="color: #00D1B2;">403</h1>
+      <h2 class="h4 mb-3">Access Denied</h2>
+      <p class="text-muted mb-4">
+        You don't have permission to access this page.<br>
+        If you believe this is an error, please contact support.
+      </p>
+    </div>
+
+    <div class="d-grid gap-2 d-md-flex justify-content-center">
+      <a href="{% url 'index' %}" class="btn btn-primary" style="background-color: #00D1B2; border: none;">Go to Home</a>
+      <a href="{% url 'about' %}" class="btn btn-outline-dark">Contact Support</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
