@@ -1,8 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, FormView, ListView
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.views.generic import CreateView, FormView, ListView, UpdateView
 
 from accounts.forms import CustomRegisterForm, EditProfileForm, CreateTeamForm
 from accounts.models import Team
@@ -21,18 +23,22 @@ class RegisterView(CreateView):
     success_url = reverse_lazy('index')
 
 
-class EditProfileView(LoginRequiredMixin, FormView):
+@method_decorator(never_cache, name='dispatch')
+class EditProfileView(LoginRequiredMixin, UpdateView):
     model = UserModel
     form_class = EditProfileForm
     template_name = 'accounts/edit-user.html'
-    success_url = reverse_lazy('dashboard')
+    success_url = reverse_lazy('edit-profile')
 
+    def get_object(self, queryset=None):
+        return self.request.user
 
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
 
 
+@method_decorator(never_cache, name='dispatch')
 class TeamsView(LoginRequiredMixin, ListView):
     template_name = 'teams/teams.html'
     model = Team
@@ -52,4 +58,9 @@ class CreateTeam(LoginRequiredMixin, CreateView):
         form.instance.manager = self.request.user
         return super().form_valid(form)
 
+
+@method_decorator(never_cache, name='dispatch')
+class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
+    template_name = 'accounts/password-change.html'
+    success_url = reverse_lazy('edit-profile')
 
