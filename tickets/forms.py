@@ -31,13 +31,14 @@ class UpdateTicketForm(BaseTicketForm):
         super().__init__(*args, **kwargs)
         self.fields['title'].disabled = True
         self.fields['facility'].disabled = True
+        self.fields['assigned_to'].disabled = True
+        self.fields['status'].disabled = True
 
-        if self.instance.facility.owner != user \
-            or self.instance.assigned_to.members == user or self.instance.assigned_to.team_owner == user:
-            self.fields['assigned_to'].disabled = True
-            self.fields['status'].disabled = True
+        if self.instance.facility.owner == user:
+            self.fields['assigned_to'].disabled = False
+            self.fields['status'].disabled = False
 
-        if self.instance.assigned_to.members == user or self.instance.assigned_to.team_owner == user:
+        if self.instance.assigned_to and user in self.instance.assigned_to.members.all():
             self.fields['status'].disabled = False
 
 

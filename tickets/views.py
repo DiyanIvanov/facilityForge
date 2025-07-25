@@ -1,7 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, FormView
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+from django.views.generic import CreateView, UpdateView, FormView, DetailView
 from tickets.models import Tickets, TicketMessages
 from tickets.forms import CreateTicketForm, UpdateTicketForm, TicketMessageForm
 
@@ -62,3 +65,36 @@ class CreateTicketMessageView(LoginRequiredMixin, CreateView):
     def form_invalid(self, form):
         print(form.errors)
         return super().form_invalid(form)
+
+
+@method_decorator(never_cache, name='dispatch')
+class GetTicketsByFacilityOrPriorityView(LoginRequiredMixin, DetailView):
+    model = Tickets
+    http_method_names = ['get',]
+
+    def get(self, request, *args, **kwargs):
+        facility_id = request.GET.get('facility')
+        priority = request.GET.get('priority')
+
+        tickets = Tickets.objects.get_all_user_tickets(user=request.user)
+
+        if facility_id:
+            tickets = tickets.filter(facility_id=facility_id)
+
+        if priority:
+            tickets = tickets.filter(priority=priority)
+
+        result = []
+        for ticket in tickets:
+            result.append({
+                "ticket_id": ticket.id,
+                "facility_name": ticket.facility.name if ticket.facility else None,
+                "priority": ticket.priority,
+                "status": ticket.status,
+                "description": ticket.description,
+
+            })
+
+        return JsonResponse(result, safe=False)
+
+

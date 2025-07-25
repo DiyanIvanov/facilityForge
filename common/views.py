@@ -1,12 +1,14 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
+from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
 from django.apps import apps
 
 
-# Create your views here.
+@method_decorator(never_cache, name='dispatch')
 class IndexPageView(TemplateView):
     template_name = 'common/index.html'
 
