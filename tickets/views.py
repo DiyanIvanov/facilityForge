@@ -1,10 +1,11 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
-from django.views.generic import CreateView, UpdateView, FormView, DetailView
+from django.views.generic import CreateView, UpdateView, DetailView
 from tickets.models import Tickets, TicketMessages
 from tickets.forms import CreateTicketForm, UpdateTicketForm, TicketMessageForm
 
@@ -31,6 +32,23 @@ class UpdateTicketView(LoginRequiredMixin, UpdateView):
     template_name = 'tickets/update-ticket.html'
     success_url = reverse_lazy('dashboard')
 
+    def get_object(self, queryset =None):
+        ticket = super().get_object(queryset)
+
+        created_by_user = ticket.created_from == self.request.user
+        user_is_facility_owner = ticket.facility.owner == self.request.user
+        is_users_team_assigned = False
+        if ticket.assigned_to:
+            is_users_team_assigned = ticket.assigned_to.members.filter(id=self.request.user.id).exists()
+
+        if not (created_by_user or user_is_facility_owner or is_users_team_assigned):
+            raise PermissionDenied("You do not have permission to update this ticket.")
+
+        if ticket.status == 'closed':
+            raise PermissionDenied("You cannot update a closed ticket.")
+
+        return ticket
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['ticket_messages'] = TicketMessages.objects.filter(ticket_id=self.object.id).order_by('created_at')
@@ -53,6 +71,20 @@ class CreateTicketMessageView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return reverse_lazy('update-ticket', kwargs={'pk': self.kwargs['pk']})
+
+    def get_object(self, queryset =None):
+        ticket = Tickets.objects.get(id=self.kwargs['pk'])
+
+        created_by_user = ticket.created_from == self.request.user
+        user_is_facility_owner = ticket.facility.owner == self.request.user
+        is_users_team_assigned = False
+        if ticket.assigned_to:
+            is_users_team_assigned = ticket.assigned_to.members.filter(id=self.request.user.id).exists()
+
+        if not (created_by_user or user_is_facility_owner or is_users_team_assigned):
+            raise PermissionDenied("You do not have permission to add a message to this ticket.")
+
+        return super().get_object(queryset)
 
     def get(self, request, *args, **kwargs):
         return redirect(self.get_success_url())
@@ -96,5 +128,3 @@ class GetTicketsByFacilityOrPriorityView(LoginRequiredMixin, DetailView):
             })
 
         return JsonResponse(result, safe=False)
-
-

@@ -36,9 +36,3 @@ class Applications(models.Model):
 
     objects = ApplicationModelManager()
 
-    def __str__(self):
-        return f'{self.pk}-{self.status}'
-
-    class Meta:
-        verbose_name = 'Application'
-        verbose_name_plural = 'Applications'
