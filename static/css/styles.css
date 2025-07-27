@@ -50,7 +50,7 @@
 }
 
 .btn-primary {
-    background-color: #00D1B2;
+    background-color: #00D1B2!important;
     border-color: #00D1B2;
     color: white;
 }
@@ -58,6 +58,22 @@
 .btn-primary:hover {
     background-color: #00b39c; /* slightly darker for hover effect */
     border-color: #00b39c;
+}
+
+.btn-primary,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary:focus:active {
+    background-color: #00D1B2 !important;
+    border-color: #00D1B2 !important;
+    color: white !important;
+    box-shadow: none !important;  /* optional: remove Bootstrap focus ring */
+    outline: none;  /* optional: remove default outline */
+}
+
+.btn-primary:hover {
+    background-color: #00b39c !important;
+    border-color: #00b39c !important;
 }
 
 .bg-low {
