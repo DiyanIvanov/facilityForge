@@ -5,7 +5,6 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, FormView, ListView, UpdateView
-
 from accounts.forms import CustomRegisterForm, EditProfileForm, CreateTeamForm, RemoveMemberForm
 from accounts.models import Team
 
