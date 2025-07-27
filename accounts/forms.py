@@ -19,7 +19,7 @@ class EditProfileForm(forms.ModelForm):
 class BaseTeamForm(forms.ModelForm):
     class Meta:
         model = Team
-        fields = ('name', 'moto', 'description', 'members')
+        fields = ('name', 'moto', 'description', 'members', 'team_owner')
 
 
 class CreateTeamForm(BaseTeamForm):
@@ -27,8 +27,20 @@ class CreateTeamForm(BaseTeamForm):
         fields = ('name', 'moto', 'description')
 
 
-class EditTeamForm(forms.ModelForm):
-    ...
+class EditTeamForm(BaseTeamForm):
+    class Meta(BaseTeamForm.Meta):
+        ...
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        if user != self.instance.team_owner:
+            for field in self.fields:
+                self.fields[field].disabled = True
+
+
+
 
 
 class RemoveMemberForm(forms.ModelForm):

@@ -28,6 +28,13 @@
                     {% render_field form.description class="form-control" %}
                 </div>
 
+                <div class="mb-3">
+                    <label for="{{ form.team_owner.id_for_label }}" class="form-label">Team Owner</label>
+                    <div>
+                        {{ form.instance.team_owner }}
+                    </div>
+                </div>
+
                 <div class="text-start mt-3">
                     <button type="submit" class="btn btn-primary">
                         Save Changes

@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, FormView, ListView, UpdateView
-from accounts.forms import CustomRegisterForm, EditProfileForm, CreateTeamForm, RemoveMemberForm
+from accounts.forms import CustomRegisterForm, EditProfileForm, CreateTeamForm, RemoveMemberForm, EditTeamForm
 from accounts.models import Team
 
 UserModel = get_user_model()
@@ -66,7 +66,7 @@ class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
 
 class EditTeamView(LoginRequiredMixin, UpdateView):
     model = Team
-    form_class = CreateTeamForm
+    form_class = EditTeamForm
     template_name = 'teams/edit-team.html'
     success_url = reverse_lazy('teams')
 
@@ -77,6 +77,11 @@ class EditTeamView(LoginRequiredMixin, UpdateView):
         context['facilities'] = self.get_object().serviced_facilities.all()
 
         return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def get_object(self, queryset=None):
         team = super().get_object(queryset)
