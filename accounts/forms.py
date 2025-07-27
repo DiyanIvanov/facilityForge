@@ -16,9 +16,24 @@ class EditProfileForm(forms.ModelForm):
         fields = ('username', 'email', 'first_name', 'last_name', 'phone_number', 'location', 'postal_code', 'rating')
 
 
-
-class CreateTeamForm(forms.ModelForm):
+class BaseTeamForm(forms.ModelForm):
     class Meta:
         model = Team
+        fields = ('name', 'moto', 'description', 'members')
+
+
+class CreateTeamForm(BaseTeamForm):
+    class Meta(BaseTeamForm.Meta):
         fields = ('name', 'moto', 'description')
 
+
+class EditTeamForm(forms.ModelForm):
+    ...
+
+
+class RemoveMemberForm(forms.ModelForm):
+    member_id = forms.IntegerField(widget=forms.HiddenInput)
+
+    class Meta:
+        model = Team
+        fields = ('member_id',)

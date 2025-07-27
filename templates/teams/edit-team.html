@@ -1,0 +1,89 @@
+{% extends 'account_management/acc_management_base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block main_content %}
+    <div class="row" style="min-height: 400px;">
+
+        <div class="col-md-3">
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold main-color">Team Details</h2>
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.name.id_for_label }}" class="form-label">Team Name</label>
+                    {% render_field form.name class="form-control" %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.moto.id_for_label }}" class="form-label">Moto</label>
+                    {% render_field form.moto class="form-control" %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                    {% render_field form.description class="form-control" %}
+                </div>
+
+                <div class="text-start mt-3">
+                    <button type="submit" class="btn btn-primary">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+
+
+        <div class="col-md-9 d-flex flex-column">
+            <!-- Team Members -->
+            <div class="flex-fill mb-2 overflow-auto border rounded p-3">
+                <h5 class="fw-bold main-color">Team Members</h5>
+                <ul class="list-group">
+                    {% for member in team_members %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center"
+                            style="max-width: 500px;">
+                            <span>{{ member.username }}</span>
+
+                            {% if user == team.team_owner or user == member %}
+                                <form method="post" action="{% url 'remove-member' team.pk %}" style="margin: 0;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="member_id" value="{{ member.id }}">
+                                    {% if user == team.team_owner %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                                    {% else %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Leave</button>
+                                    {% endif %}
+                                </form>
+                            {% endif %}
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-muted">No team members</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Facilities -->
+            <div class="flex-fill mt-2 overflow-auto border rounded p-3">
+                <h5 class="fw-bold main-color">Facilities Serviced</h5>
+                <ul class="list-group">
+                    {% for facility in facilities %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center"
+                            style="max-width: 500px;">
+                            <span>{{ facility.name }}</span>
+                            <form method="post" action="#"
+                                  style="margin: 0;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                            </form>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-muted" style="max-width: 500px;">No facilities assigned.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

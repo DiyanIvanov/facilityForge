@@ -3,7 +3,7 @@
 {% block main_content %}
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="mb-0">Facilities</h3>
+        <h3 class="mb-0 main-color">Facilities</h3>
         <a href="{% url 'create-facility' %}" class="btn btn-primary" style="background-color: #00D1B2; border: none;">
             <i class="bi bi-plus-lg me-1"></i> Create New
         </a>
@@ -14,7 +14,7 @@
         {% for facility in facilities %}
             <a href="#" class="list-group-item list-group-item-action py-3 mb-3 border-1 rounded-3 shadow-sm">
                 <div class="d-flex w-100 justify-content-between align-items-center">
-                    <h5 class="mb-1">{{ facility.name }}</h5>
+                    <h5 class="mb-1 main-color">{{ facility.name }}</h5>
                     <small class="text-muted">{{ facility.tenants.count }} tenant{{ facility.tenants.count|pluralize }}</small>
                 </div>
                 <p class="mb-1 fst-italic text-secondary">{{ facility.description }}</p>
