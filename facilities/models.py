@@ -53,6 +53,7 @@ class Facility(models.Model):
         blank=True,
     )
 
+
     objects = FacilityManager()
 
     def __str__(self):

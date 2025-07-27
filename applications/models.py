@@ -36,3 +36,7 @@ class Applications(models.Model):
 
     objects = ApplicationModelManager()
 
+    class Meta:
+        verbose_name = 'Application'
+        verbose_name_plural = 'Applications'
+        ordering = ['-created']

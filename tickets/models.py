@@ -38,6 +38,11 @@ class Tickets(models.Model):
     )
     objects = TicketManager()
 
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = 'Ticket'
+        verbose_name_plural = 'Tickets'
+
     def __str__(self):
         return self.title
 
@@ -46,6 +51,8 @@ class TicketMessages(models.Model):
 
     class Meta:
         ordering = ['created_at']
+        verbose_name = 'Ticket Message'
+        verbose_name_plural = 'Ticket Messages'
 
     ticket = models.ForeignKey(
         Tickets,
