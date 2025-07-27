@@ -107,7 +107,7 @@ class RemoveMemberView(LoginRequiredMixin, UpdateView):
         return team
 
     def get_success_url(self):
-        return reverse_lazy('edit-team', kwargs={'pk': self.object.pk})
+        return self.request.META.get('HTTP_REFERER')
 
     def form_valid(self, form):
         member_id = form.cleaned_data['member_id']
