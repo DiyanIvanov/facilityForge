@@ -166,9 +166,9 @@ class RemoveFacilityView(LoginRequiredMixin, UpdateView):
         facility = form.instance.serviced_facilities.get(id=facility_id)
 
         if facility:
-            obj = self.get_object()
-            obj.serviced_facilities.remove(facility)
-            obj.save()
+            team_obj = self.get_object()
+            team_obj.serviced_facilities.remove(facility)
+            team_obj.save()
             return super().form_valid(form)
         else:
             return self.form_invalid(form)
