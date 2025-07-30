@@ -29,9 +29,9 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="{{ form.team_owner.id_for_label }}" class="form-label">Team Owner</label>
+                    <div>Team Owner</div>
                     <div>
-                        {{ form.instance.team_owner }}
+                        {{ team_owner }}
                     </div>
                 </div>
 
@@ -55,7 +55,7 @@
                             <span>{{ member.username }}</span>
 
                             {% if user == team.team_owner or user == member %}
-                                <form method="post" action="{% url 'remove-member' team.pk %}" style="margin: 0;">
+                                <form method="post" action="{% url 'remove-team-member' team.pk %}" style="margin: 0;">
                                     {% csrf_token %}
                                     <input type="hidden" name="member_id" value="{{ member.id }}">
                                     {% if user == team.team_owner %}
@@ -80,9 +80,10 @@
                         <li class="list-group-item d-flex justify-content-between align-items-center"
                             style="max-width: 500px;">
                             <span>{{ facility.name }}</span>
-                            <form method="post" action="#"
+                            <form method="post" action="{% url 'remove-facility' team.pk %}"
                                   style="margin: 0;">
                                 {% csrf_token %}
+                                <input type="hidden" name="facility_id" value="{{ facility.id }}">
                                 <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
                             </form>
                         </li>

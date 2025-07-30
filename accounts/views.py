@@ -5,7 +5,8 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, FormView, ListView, UpdateView
-from accounts.forms import CustomRegisterForm, EditProfileForm, CreateTeamForm, RemoveMemberForm, EditTeamForm
+from accounts.forms import CustomRegisterForm, EditProfileForm, CreateTeamForm, RemoveMemberForm, EditTeamForm, \
+    RemoveFacilityForm
 from accounts.models import Team
 
 UserModel = get_user_model()
@@ -63,7 +64,7 @@ class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
     template_name = 'accounts/password-change.html'
     success_url = reverse_lazy('edit-profile')
 
-
+@method_decorator(never_cache, name='dispatch')
 class EditTeamView(LoginRequiredMixin, UpdateView):
     model = Team
     form_class = EditTeamForm
@@ -72,16 +73,12 @@ class EditTeamView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        context['team_members'] = self.get_object().members.all()
-        context['facilities'] = self.get_object().serviced_facilities.all()
+        obj = self.get_object()
+        context['team_owner'] = obj.team_owner
+        context['team_members'] = obj.members.all()
+        context['facilities'] = obj.serviced_facilities.all()
 
         return context
-
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        kwargs['user'] = self.request.user
-        return kwargs
 
     def get_object(self, queryset=None):
         team = super().get_object(queryset)
@@ -91,7 +88,16 @@ class EditTeamView(LoginRequiredMixin, UpdateView):
 
         return team
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
+
+        if self.request.user != self.get_object().team_owner:
+            raise PermissionError("Only the team owner can make changes.")
+
         form.save()
         return super().form_valid(form)
 
@@ -116,15 +122,53 @@ class RemoveMemberView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         member_id = form.cleaned_data['member_id']
         member = form.instance.members.get(id=member_id)
+        team_obj = self.get_object()
 
-        is_owner = self.request.user == self.get_object().team_owner
+        is_owner = self.request.user == team_obj.team_owner
         is_member = self.request.user == member
         if not is_member and not is_owner:
             raise PermissionError("You cannot remove this member from the team.")
 
         if member:
-            self.get_object().members.remove(member)
-            self.get_object().save()
+            team_obj.members.remove(member)
+            team_obj.save()
+            return super().form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+
+@method_decorator(never_cache, name='dispatch')
+class RemoveFacilityView(LoginRequiredMixin, UpdateView):
+    model = Team
+    form_class = RemoveFacilityForm
+    http_method_names = ['post']
+
+    def get_object(self, queryset=None):
+        team = super().get_object()
+        facility_id = self.request.POST.get('facility_id')
+        facility = team.serviced_facilities.filter(id=facility_id).first()
+
+        if not facility:
+            raise ValueError("This facility is not serviced by this team.")
+
+        if team.team_owner != self.request.user \
+            and not team.members.filter(id=self.request.user.id).exists() \
+            and facility.owner != self.request.user:
+                raise PermissionError("You are neither member of this team or facility owner.")
+
+        return team
+
+    def get_success_url(self):
+        return self.request.META.get('HTTP_REFERER')
+
+    def form_valid(self, form):
+        facility_id = form.cleaned_data['facility_id']
+        facility = form.instance.serviced_facilities.get(id=facility_id)
+
+        if facility:
+            obj = self.get_object()
+            obj.serviced_facilities.remove(facility)
+            obj.save()
             return super().form_valid(form)
         else:
             return self.form_invalid(form)
