@@ -40,3 +40,11 @@ class UpdateFacilityForm(BaseFacilityForm):
 
 class DeleteFacilityForm(BaseFacilityForm):
     ...
+
+
+class RemoveTenantForm(forms.ModelForm):
+    tenant_id = forms.CharField(widget=forms.HiddenInput)
+
+    class Meta:
+        model = Facility
+        fields = ('tenant_id',)

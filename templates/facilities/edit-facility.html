@@ -65,9 +65,9 @@
                             <span>{{ tenant.username }}</span>
 
                             {% if user == owner or user == tenant %}
-                                <form method="post" action="#" style="margin: 0;">
+                                <form method="post" action="{% url 'remove-tenant' facility.id %}" >
                                     {% csrf_token %}
-                                    <input type="hidden" name="member_id" value="{{ tenant.id }}">
+                                    <input type="hidden" name="tenant_id" value="{{ tenant.id }}">
                                     {% if user == owner %}
                                         <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
                                     {% else %}
