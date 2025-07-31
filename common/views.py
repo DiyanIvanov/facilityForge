@@ -1,8 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
-from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
 from django.apps import apps
@@ -34,6 +32,10 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             'tickets',
             'Tickets'
         ).objects.get_all_user_tickets(user=self.request.user)
-        # todo: add all facilities user is involved wit, when custom manager is implemented
-        context['facilities'] = self.request.user.owned_facilities.all()
+
+        context['facilities'] = apps.get_model(
+            'facilities',
+            'Facility'
+        ).objects.facilities_user_is_involved_in(self.request.user)
+
         return context
