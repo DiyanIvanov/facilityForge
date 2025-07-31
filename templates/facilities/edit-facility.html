@@ -1,0 +1,113 @@
+{% extends 'account_management/acc_management_base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block main_content %}
+    <div class="row" style="min-height: 400px;">
+
+        <div class="col-md-3">
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold main-color">Facility Details</h2>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 5px;">
+                    <div style="flex: 1;">
+                        <label for="{{ form.name.id_for_label }}">Facility: </label>
+                        {% render_field form.name class="form-control" %}
+                    </div>
+                    <div style="flex: 1;">
+                        <label for="{{ form.status.id_for_label }}">Status: </label>
+                        {% render_field form.status class="form-control" %}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.location.id_for_label }}" class="form-label">Location</label>
+                    {% render_field form.location class="form-control" %}
+                </div>
+                <div class="mb-3">
+                    <label for="{{ form.postcode.id_for_label }}" class="form-label">Postcode</label>
+                    {% render_field form.postcode class="form-control" %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+                    {% render_field form.description class="form-control" rows="5" %}
+                </div>
+
+                <div class="mb-3">
+                    <div>Facility Owner</div>
+                    <div>
+                        {{ owner }}
+                    </div>
+                </div>
+
+                <div class="text-start mt-3">
+                    <button type="submit" class="btn btn-primary">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+
+
+        <div class="col-md-9 d-flex flex-column">
+            <!-- Facility Tenants -->
+            <div class="flex-fill mb-2 overflow-auto border rounded p-3">
+                <h5 class="fw-bold main-color">Tenants</h5>
+                <ul class="list-group">
+                    {% for tenant in tenants %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center"
+                            style="max-width: 500px;">
+                            <span>{{ tenant.username }}</span>
+
+                            {% if user == owner or user == tenant %}
+                                <form method="post" action="#" style="margin: 0;">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="member_id" value="{{ tenant.id }}">
+                                    {% if user == owner %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                                    {% else %}
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">Leave</button>
+                                    {% endif %}
+                                </form>
+                            {% endif %}
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-muted" style="max-width: 500px;">No tenants</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Facilities -->
+            <div class="flex-fill mt-2 overflow-auto border rounded p-3">
+                <h5 class="fw-bold main-color">Service Teams</h5>
+                <ul class="list-group">
+                    {% for team in service_teams %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center"
+                            style="max-width: 500px;">
+                            <span>{{ team.name }}</span>
+
+                            <form method="post" action="{% url 'remove-facility' team.id  %}"
+                                  style="margin: 0;">
+                                {% csrf_token %}
+                                <input type="hidden" name="facility_id" value="{{ facility.id }}">
+                                {% if user == owner %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                                {% endif %}
+                                {% if user == team.team_owner or user in team.members %}
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Leave</button>
+                                {% endif %}
+                            </form>
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item text-muted" style="max-width: 500px;">No facilities.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

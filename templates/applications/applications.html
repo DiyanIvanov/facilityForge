@@ -47,7 +47,7 @@
             <div class="card-body">
                 <!-- Application Item -->
                 {% for application in applications %}
-                    {% if application.applicant.id == request.user.id and application.facility.owner != request.user or application.team.team_owner != request.user %}
+                    {% if application.applicant.id == request.user.id  %}
                         <div class="mb-3 border-bottom pb-2" id="application-{{ application.pk }}">
                             {% if application.team is not None and application.facility is not None %}
                                 <div><strong>Your team "{{ application.team }}"</strong> applied to

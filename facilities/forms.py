@@ -11,7 +11,6 @@ class BaseFacilityForm(ModelForm):
         fields = '__all__'
 
 
-
 class CreateFacilityForm(BaseFacilityForm):
 
     class Meta(BaseFacilityForm.Meta):
@@ -25,8 +24,19 @@ class CreateFacilityForm(BaseFacilityForm):
 
 
 class UpdateFacilityForm(BaseFacilityForm):
+    class Meta(BaseFacilityForm.Meta):
+        fields = ('name', 'location', 'postcode', 'status', 'description')
 
-    ...
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        self.fields['status'].disabled = True
+
+        if user != self.instance.owner:
+            for field in self.fields:
+                self.fields[field].disabled = True
+
 
 class DeleteFacilityForm(BaseFacilityForm):
     ...
