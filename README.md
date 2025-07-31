@@ -31,7 +31,7 @@
 Clone the repo:
 
 ```bash
-git clone https://github.com/yourusername/facility-forge.git
+git clone https://github.com/DiyanIvanov/facilityForge.git
 cd facility-forge
 ```
 
