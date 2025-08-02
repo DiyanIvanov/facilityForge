@@ -11,6 +11,8 @@ from accounts.forms import CustomRegisterForm, EditProfileForm, CreateTeamForm, 
 from accounts.models import Team
 from django.contrib.auth import login
 
+from facilityForge.mixins import DeleteObjectMixin
+
 UserModel = get_user_model()
 
 class CustomLoginView(LoginView):
@@ -179,3 +181,20 @@ class RemoveFacilityView(LoginRequiredMixin, UpdateView):
             return super().form_valid(form)
         else:
             return self.form_invalid(form)
+
+
+@method_decorator(never_cache, name='dispatch')
+class DeleteTeamView(LoginRequiredMixin, DeleteObjectMixin):
+    model = Team
+    template_name = 'teams/delete-team.html'
+    success_url = reverse_lazy('teams')
+    message = 'This team cannot be deleted at this time.'
+    fail_url = 'edit-team'
+
+    def get_object(self, queryset=None):
+        team = super().get_object(queryset)
+
+        if team.team_owner != self.request.user:
+            raise PermissionError("Only team owner can delete the team.")
+
+        return team
