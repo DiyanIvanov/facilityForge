@@ -46,9 +46,17 @@
                 </div>
 
                 <div class="text-start mt-3">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
                     <button type="submit" class="btn btn-primary">
                         Save Changes
                     </button>
+                    <a href="{% url 'delete-facility' facility.id %}" class="btn btn-danger">
+                        Delete Facility
+                    </a>
                 </div>
             </form>
         </div>

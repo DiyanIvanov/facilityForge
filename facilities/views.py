@@ -3,9 +3,11 @@ from django.core.exceptions import PermissionDenied
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
-from django.views.generic import CreateView, ListView, UpdateView
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from facilities.models import Facility
-from facilities.forms import CreateFacilityForm, UpdateFacilityForm, RemoveTenantForm
+from facilities.forms import CreateFacilityForm, UpdateFacilityForm, RemoveTenantForm, DeleteFacilityForm
+from django.contrib import messages
+from django.shortcuts import redirect
 
 
 class FacilityManagement(LoginRequiredMixin, ListView):
@@ -102,3 +104,25 @@ class RemoveTenantView(LoginRequiredMixin, UpdateView):
         self.facility.save()
 
         return super().form_valid(form)
+
+@method_decorator(never_cache, name='dispatch')
+class DeleteFacilityView(LoginRequiredMixin, DeleteView):
+    model = Facility
+    template_name = 'facilities/delete-facility.html'
+    success_url = reverse_lazy('facilities')
+
+    def get_object(self, queryset=None):
+        facility = super().get_object(queryset)
+
+        if facility.owner != self.request.user:
+            raise PermissionDenied("You do not have permission to delete this facility.")
+
+        return facility
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        if self.object.tickets.filter(status__in=['open', 'in_progress']).exists():
+            messages.warning(self.request, "You cannot delete a facility with open or in-progress tickets.")
+            return redirect('edit-facility', pk=self.object.pk)
+        return super().dispatch(request, *args, **kwargs)

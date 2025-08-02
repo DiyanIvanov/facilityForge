@@ -39,7 +39,11 @@ class UpdateFacilityForm(BaseFacilityForm):
 
 
 class DeleteFacilityForm(BaseFacilityForm):
-    ...
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['readonly'] = True
 
 
 class RemoveTenantForm(forms.ModelForm):
