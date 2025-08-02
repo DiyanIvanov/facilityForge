@@ -8,6 +8,7 @@ from django.views.generic import CreateView, FormView, ListView, UpdateView
 from accounts.forms import CustomRegisterForm, EditProfileForm, CreateTeamForm, RemoveMemberForm, EditTeamForm, \
     RemoveFacilityForm
 from accounts.models import Team
+from django.contrib.auth import login
 
 UserModel = get_user_model()
 
@@ -21,6 +22,11 @@ class RegisterView(CreateView):
     form_class = CustomRegisterForm
     template_name = 'accounts/register-page.html'
     success_url = reverse_lazy('index')
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return super().form_valid(form)
 
 
 @method_decorator(never_cache, name='dispatch')
