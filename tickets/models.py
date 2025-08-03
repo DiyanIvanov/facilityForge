@@ -6,6 +6,8 @@ from tickets.choices import TicketStatusChoices, TicketPriorityChoices
 from tickets.managers import TicketManager
 from cloudinary.models import CloudinaryField
 
+from tickets.validators import ImageValidator, ImageSizeValidator
+
 
 class Tickets(models.Model):
     title = models.CharField(max_length=255)
@@ -26,7 +28,8 @@ class Tickets(models.Model):
         blank=True,
         null=True,
         validators=[
-
+            ImageValidator(),
+            ImageSizeValidator(5, msg="Image size must be less than 5MB.")
         ]
     )
     created_at = models.DateTimeField(auto_now_add=True)
