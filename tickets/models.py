@@ -1,7 +1,10 @@
+from wsgiref.validate import validator
+
 from django.db import models
 
 from tickets.choices import TicketStatusChoices, TicketPriorityChoices
 from tickets.managers import TicketManager
+from cloudinary.models import CloudinaryField
 
 
 class Tickets(models.Model):
@@ -17,6 +20,15 @@ class Tickets(models.Model):
         default=TicketPriorityChoices.LOW
     )
     description = models.TextField()
+    image = CloudinaryField(
+        'image',
+        folder='facilityForge',
+        blank=True,
+        null=True,
+        validators=[
+
+        ]
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     created_from = models.ForeignKey(
@@ -36,6 +48,7 @@ class Tickets(models.Model):
         blank=True,
         related_name='assigned_tickets'
     )
+
     objects = TicketManager()
 
     class Meta:

@@ -7,7 +7,7 @@
         <div class="row">
             <div class="ticket-container">
                 <div class="ticket-fields">
-                    <h3>Ticket Details</h3>
+                    <h3 style="color: #00D1B2;">Ticket Details</h3>
                     <form method="post">
                         {% csrf_token %}
 
@@ -57,8 +57,37 @@
                     </form>
                 </div>
 
-                <div class="ticket-messages" style="display: flex; flex-direction: column; height: 100%;">
-                    <h3>Messages</h3>
+                <div class="ticket-messages" style="display: flex; flex-direction: column; height: 50%;">
+                    {% if form.instance.image %}
+                        <div id="ticketImageCarousel" class="carousel slide mb-4" data-bs-ride="carousel"
+                             style="max-width: 400px; margin: auto;">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <img src="{{ form.instance.image.url }}"
+                                         class="d-block w-100"
+                                         alt="Ticket Image"
+                                         style="cursor: pointer;"
+                                         data-bs-toggle="modal"
+                                         data-bs-target="#imageModal">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-xl">
+                                <div class="modal-content bg-transparent border-0">
+                                    <div class="modal-body text-center p-0">
+                                        <img src="{{ form.instance.image.url }}" class="img-fluid rounded"
+                                             alt="Full Size Ticket Image">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+
+                    <h3 style="color: #00D1B2;">Messages</h3>
 
                     <!-- Messages list -->
                     <div class="messages-list" style="flex: 1; overflow-y: auto; margin-bottom: 20px;">

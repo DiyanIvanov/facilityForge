@@ -11,7 +11,7 @@ class BaseTicketForm(ModelForm):
 
 class CreateTicketForm(BaseTicketForm):
     class Meta(BaseTicketForm.Meta):
-        fields = ['title', 'facility', 'priority', 'description']
+        fields = ['title', 'facility', 'priority', 'description', 'image']
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -20,6 +20,8 @@ class CreateTicketForm(BaseTicketForm):
             self.fields['facility'].queryset = apps.get_model('facilities', 'Facility').objects.filter(
                 Q(owner=user) | Q(manager=user) | Q(tenants=user)
             ).distinct()
+
+        self.fields['description'].widget.attrs.update({'rows': 7})
 
 
 class UpdateTicketForm(BaseTicketForm):
