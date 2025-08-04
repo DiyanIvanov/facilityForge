@@ -4,7 +4,7 @@ from django import forms
 from accounts.models import Team
 
 
-class  CustomRegisterForm(UserCreationForm):
+class CustomRegisterForm(UserCreationForm):
     class Meta(UserCreationForm):
         model = get_user_model()
         fields = ('username', 'email')

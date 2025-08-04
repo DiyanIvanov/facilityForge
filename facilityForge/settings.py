@@ -165,12 +165,19 @@ cloudinary.config(
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT', cast=int)
 EMAIL_HOST_USER = config('EMAIL_API_KEY')
 EMAIL_HOST_PASSWORD = config('EMAIL_API_SECRET')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool, default=True)
 COMPANY_EMAIL = config('COMPANY_EMAIL')
+
+
+CELERY_BROKER_URL = config('CELERY_BROKER_URL')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

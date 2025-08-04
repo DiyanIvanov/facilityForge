@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
+from django.core.mail import send_mail
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -9,7 +10,7 @@ from accounts.forms import CustomRegisterForm, EditProfileForm, CreateTeamForm, 
     RemoveFacilityForm
 from accounts.models import Team
 from django.contrib.auth import login
-
+from accounts.tasks import send_reset_password_confirmation
 from facilityForge.mixins import DeleteObjectMixin
 
 UserModel = get_user_model()
@@ -74,6 +75,7 @@ class CreateTeam(LoginRequiredMixin, CreateView):
 class ChangePasswordView(LoginRequiredMixin, PasswordChangeView):
     template_name = 'accounts/password-change.html'
     success_url = reverse_lazy('edit-profile')
+
 
 @method_decorator(never_cache, name='dispatch')
 class EditTeamView(LoginRequiredMixin, UpdateView):
