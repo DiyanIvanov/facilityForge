@@ -4,8 +4,6 @@ from django.conf import settings
 
 @shared_task
 def send_welcome(username, email):
-    print(f"Sending email to {email}")
-    print(f"Sending email to {username}")
     send_mail(
         subject='Welcome to FacilityForge!',
         message=f'Hello {username},\n\nThank you for registering at FacilityForge. We are excited to have you on board!',

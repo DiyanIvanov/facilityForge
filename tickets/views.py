@@ -8,6 +8,7 @@ from django.views.decorators.cache import never_cache
 from django.views.generic import CreateView, UpdateView, DetailView
 from tickets.models import Tickets, TicketMessages
 from tickets.forms import CreateTicketForm, UpdateTicketForm, TicketMessageForm
+from tickets.tasks import send_ticket_notification
 
 
 class CreateTicketView(LoginRequiredMixin, CreateView):
@@ -23,7 +24,15 @@ class CreateTicketView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.created_from = self.request.user
-        return super().form_valid(form)
+        response = super().form_valid(form)
+
+        send_ticket_notification.delay(
+            ticket_id=form.instance.id,
+            username=self.request.user.username,
+            user_email=self.request.user.email,
+            ticket_title=form.instance.title
+        )
+        return response
 
 
 class UpdateTicketView(LoginRequiredMixin, UpdateView):
