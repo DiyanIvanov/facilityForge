@@ -32,10 +32,10 @@ class AcceptOrRejectApplicationView(LoginRequiredMixin, FormView):
     def form_valid(self, form):
         application_id = form.cleaned_data['id']
         action = form.cleaned_data['action']
+
         try:
             application = Applications.objects.get(pk=application_id)
-            # todo: check if the user is allowed to accept or reject this application
-            # For now, we assume the user is allowed to accept or reject any application
+            self.check_user_permissions(application)
             if action == 'accept':
                 self.accept_application(application)
             elif action == 'reject':
@@ -80,6 +80,17 @@ class AcceptOrRejectApplicationView(LoginRequiredMixin, FormView):
             application.facility.save()
         application.save()
         return 0
+
+    def check_user_permissions(self, application):
+        user = self.request.user
+        if application.team:
+            team = application.team
+            if user != team.team_owner or user != team.manager:
+                raise PermissionError("You do not have permission to manage this team's applications.")
+        elif application.facility:
+            facility = application.facility
+            if user != facility.owner or user != facility.manager:
+                raise PermissionError("You do not have permission to manage this facility's applications.")
 
 class SearchFacilitiesAndTeamsView(LoginRequiredMixin, View):
     teams_model = apps.get_model('accounts', 'Team')
