@@ -164,7 +164,15 @@ class FacilityApplicationView(LoginRequiredMixin, CreateView):
         return kwargs
 
     def form_valid(self, form):
-        facility = self.facility_model.objects.get(pk=self.kwargs['pk'])
+        try:
+            facility = self.facility_model.objects.get(pk=self.kwargs['pk'])
+        except self.facility_model.DoesNotExist:
+            raise Http404
+
+        # check if user is allowed to apply to this facility
+        if not self.facility_model.objects.is_user_allowed_to_apply(self.request.user, facility):
+            raise PermissionDenied
+
         form.instance.applicant = self.request.user
         form.instance.facility = facility
         form.instance.status = 'pending'

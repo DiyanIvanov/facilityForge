@@ -28,3 +28,15 @@ class FacilityManager(Manager):
         )
 
         return self.filter(direct_involvement).distinct()
+
+    def is_user_allowed_to_apply(self, user, facility):
+        facility = self.get(pk=facility.pk)
+        if facility.owner == user or facility.manager == user:
+            return False
+        if facility.applications.filter(applicant=user, status__in=['pending']).exists():
+            return False
+        if facility.tenants.filter(pk=user.pk).exists():
+            return False
+        if facility.engineering_teams.filter(Q(members=user) | Q(team_owner=user) | Q(manager=user)).exists():
+            return False
+        return True
