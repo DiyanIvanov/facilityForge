@@ -51,3 +51,36 @@ class TeamApplicationViewTests(TestCase):
         })
         self.assertEqual(response.status_code, 403)
 
+
+class FacilityApplicationViewTests(TestCase):
+    def setUp(self):
+        self.user = UserModel.objects.create_user(username='user', password='pass', email='user@user.com')#
+        self.other_user = UserModel.objects.create_user(username='other_user', password='pass', email='other_user@user.com')
+        self.client.login(username='user', password='pass')
+
+        self.facility = Facility.objects.create(name='Facility A', owner=self.other_user)
+
+        self.team = Team.objects.create(name='Team A', team_owner=self.other_user, manager=self.other_user)
+
+    def test__create_facility_application(self):
+        response = self.client.post(f'/applications/{self.facility.pk}/facility-application/', {
+            'description': 'New facility application',
+        })
+        self.assertIn(response.status_code, (301, 302))
+
+    def test_create_facility_application__with_invalid_facility(self):
+        response = self.client.post('/applications/999/facility-application/', {
+            'description': 'Invalid facility application'
+        })
+        self.assertEqual(response.status_code, 404)
+
+    def test__double_facility_application(self):
+        response = self.client.post(f'/applications/{self.facility.pk}/facility-application/', {
+            'description': 'New facility application',
+        })
+        self.assertIn(response.status_code, (301, 302))
+
+        response = self.client.post(f'/applications/{self.facility.pk}/facility-application/', {
+            'description': 'New facility application',
+        })
+        self.assertEqual(response.status_code, 403)
