@@ -1,9 +1,12 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import JsonResponse
+from django.core.exceptions import PermissionDenied
+from django.http import JsonResponse, Http404
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView, FormView, TemplateView, CreateView
 from django.apps import apps
+
+from accounts.models import Team
 from applications.forms import ApplicationForm, TeamApplicationForm, FacilityApplicationForm
 from applications.models import Applications
 
@@ -128,7 +131,15 @@ class  TeamApplicationView(LoginRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
-        team = apps.get_model(app_label='accounts', model_name='Team').objects.get(pk=self.kwargs['pk'])
+        try:
+            team = apps.get_model(app_label='accounts', model_name='Team').objects.get(pk=self.kwargs['pk'])
+        except Team.DoesNotExist:
+            raise Http404
+
+        # check if user is allowed to apply to this team
+        if not Team.objects.is_user_allowed_to_apply(self.request.user, team):
+            raise PermissionDenied
+
         form.instance.applicant = self.request.user
         form.instance.team = team
         form.instance.status = 'pending'
