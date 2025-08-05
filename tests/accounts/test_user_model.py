@@ -36,15 +36,14 @@ class TestUserModel(TestCase):
 
 
     def test__invalid_rating__raises_error(self):
-        with self.assertRaises(BaseException):
-            user = UserModel.objects.create_user(
-                email='test@test.com',
-                username='TestUser',
-                password='TestPassword!23',
-                rating= 11
-            )
-            with self.assertRaises(ValidationError):
-                user.full_clean()
+        user = UserModel(
+            email='test@test.com',
+            username='TestUser',
+            rating=11
+        )
+        user.set_password('TestPassword!23')
+        with self.assertRaises(ValidationError):
+            user.full_clean()
 
 
     def test__invalid_rating_below_minimum__raises_error(self):
